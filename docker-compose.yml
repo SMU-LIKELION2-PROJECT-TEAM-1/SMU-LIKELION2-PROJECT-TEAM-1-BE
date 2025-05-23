@@ -1,4 +1,4 @@
-version: '2.35.1'
+version: '3'
 services:
   likelion-db:
     image: mysql
@@ -9,16 +9,17 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping" ]
       interval: 3s
       retries: 10
+
   likelion-server:
     build: .
     container_name: likelion-springboot-container
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       likelion-db:
         condition: service_healthy

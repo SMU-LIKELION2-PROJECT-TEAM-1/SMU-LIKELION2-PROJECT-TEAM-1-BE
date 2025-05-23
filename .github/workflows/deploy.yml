@@ -20,6 +20,9 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Grant Execute Permission For Gradlew
+        run: chmod +x gradlew
+
       - name: build
         run: ./gradlew clean build -x test
 
