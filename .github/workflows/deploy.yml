@@ -20,7 +20,7 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: 테스트 및 빌드하기
+      - name: 빌드하기
         run: ./gradlew clean build -x test
 
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
@@ -30,9 +30,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Docker build
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/likelion:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/likelion:latest
 
