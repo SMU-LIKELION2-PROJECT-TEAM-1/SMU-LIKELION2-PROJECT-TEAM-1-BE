@@ -51,6 +51,6 @@ jobs:
           script_stop: true
           script: |
             docker stop likelion || true
-            docker rm likelion || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/likelion:latest
+            docker rm -f likelion || true
+            docker pull ${{ secrets.DOCKER_USERNAME }}/likelion:latest
             docker run -d --name likelion -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/likelion:latest
