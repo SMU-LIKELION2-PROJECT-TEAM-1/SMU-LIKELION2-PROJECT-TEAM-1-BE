@@ -58,6 +58,15 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 }
 
+processResources.dependsOn('copyPrivate')
+tasks.register('copyPrivate', Copy) {
+    copy {
+        from './SMU-LIKELION2-PROJECT-TEAM-1-SUBMODULE'
+        include "*.yml"
+        into 'src/main/resources'
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
