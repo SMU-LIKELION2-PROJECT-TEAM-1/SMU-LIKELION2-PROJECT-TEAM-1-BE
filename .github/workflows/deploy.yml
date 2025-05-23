@@ -8,13 +8,13 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Github Repository에 올린 파일들을 불러오기
+      - name: checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.ACTION_TOKEN }}
           submodules: true
 
-      - name: install JDK 21v
+      - name: install JDK ver.21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
