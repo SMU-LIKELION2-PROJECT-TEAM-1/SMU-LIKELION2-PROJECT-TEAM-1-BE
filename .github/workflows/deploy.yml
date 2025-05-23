@@ -30,20 +30,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
 
-      - name: ECR에 로그인하기
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      - name: Docker build
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/likelion:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/likelion:latest
 
-      - name: Docker Image 생성
-        run: docker build -t ci-cd .
-
-      - name: Docker Image에 Tag 붙이기
-        run: docker tag ci-cd ${{ steps.login-ecr.outputs.registry }}/ci-cd:latest
-
-      - name: ECR에 Docker 이미지 Push하기
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/ci-cd:latest
-
-      - name: SSH로 EC2에 접속하기
+      - name: Aws 배포
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -52,7 +45,7 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            docker stop ci-cd || true
-            docker rm ci-cd || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/ci-cd:latest
-            docker run -d --name ci-cd -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/ci-cd:latest
+            docker stop likelion || true
+            docker rm likelion || true
+            docker pull ${{ steps.login-ecr.outputs.registry }}/likelion:latest
+            docker run -d --name likelion -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/likelion:latest
