@@ -4,11 +4,6 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIR
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Difficulty;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.CookingTime;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.FoodType;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Purpose;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.TimeSituation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
