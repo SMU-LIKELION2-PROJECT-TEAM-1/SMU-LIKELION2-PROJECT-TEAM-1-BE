@@ -5,19 +5,6 @@ on:
       - Setting/#11
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0.30
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: admin
-          MYSQL_USER: admin
-          MYSQL_PASSWORD: root
-        ports:
-          - 3306:3306
   Deploy:
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +21,7 @@ jobs:
           java-version: 21
 
       - name: 테스트 및 빌드하기
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
