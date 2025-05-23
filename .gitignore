@@ -190,11 +190,10 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-application-local.yml
-application-oauth2.yml
-application-aws.yml
-application-swagger.yml
+# submodule
+*.yml
 
 src/main/generated
+
 mysql_data
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,java,gradle,macos,git
