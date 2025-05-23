@@ -2,7 +2,7 @@ name: Deploy To EC2
 on:
   push:
     branches:
-      - Setting#11
+      - Setting/#11
 
 jobs:
   Deploy:
