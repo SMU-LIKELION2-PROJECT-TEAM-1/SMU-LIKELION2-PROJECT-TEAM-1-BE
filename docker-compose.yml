@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   likelion-db:
     image: mysql
@@ -10,10 +10,6 @@ services:
       - ./mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping" ]
-      interval: 3s
-      retries: 10
 
   likelion-server:
     build: .
@@ -21,5 +17,4 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      likelion-db:
-        condition: service_healthy
+      - likelion-db
