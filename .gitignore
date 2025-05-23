@@ -193,6 +193,7 @@ gradle-app.setting
 application-local.yml
 application-oauth2.yml
 application-aws.yml
+application-swagger.yml
 
 src/main/generated
 mysql_data
