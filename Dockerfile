@@ -1,5 +1,7 @@
 FROM openjdk:21-jdk
 
-COPY build/libs/*SNAPSHOT.jar project.jar
+ARG JAR_FILE=build/libs/*SNAPSHOT.jar
+
+COPY ${JAR_FILE} project.jar
 
 ENTRYPOINT ["java", "-jar", "project.jar"]

@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - Setting/#11
+  pull_request:
+    branches:
+      - Setting/#11
 
 jobs:
   Deploy:
@@ -57,4 +60,4 @@ jobs:
           script: |
             docker-compose down || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/likelion:latest
-            docker-compose up -d
+            docker-compose up -d --build
