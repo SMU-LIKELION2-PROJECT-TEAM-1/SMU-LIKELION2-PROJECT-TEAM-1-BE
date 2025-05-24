@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Tag(name = "Auth Controller", description = "Auth API")
+@Tag(name = "Auth Controller", description = "Auth!! API")
 public abstract class AuthDocsController {
 
     @Operation(
