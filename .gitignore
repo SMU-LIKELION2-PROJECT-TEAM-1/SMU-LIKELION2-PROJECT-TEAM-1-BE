@@ -192,6 +192,7 @@ gradle-app.setting
 
 # submodule
 *.yml
+!.github/workflows/deploy.yml
 
 src/main/generated
 
