@@ -1,7 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.auth.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.auth.controller.dto.ReissueTokenRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.auth.service.dto.TokenResponse;
+import com.kwakmunsu.likelionprojectteam1.global.jwt.dto.TokenResponse;
 import com.kwakmunsu.likelionprojectteam1.global.SecurityOverrideCustomizer;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
