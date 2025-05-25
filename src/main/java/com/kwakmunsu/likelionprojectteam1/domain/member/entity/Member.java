@@ -10,9 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Table(name = "members")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Member {
@@ -93,6 +95,14 @@ public class Member {
 
     public void updateRefreshToken(String newRefreshToken) {
         this.refreshToken = newRefreshToken;
+    }
+
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
     }
 
 }
