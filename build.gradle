@@ -69,6 +69,6 @@ tasks.register('copyPrivate', Copy) {
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }
