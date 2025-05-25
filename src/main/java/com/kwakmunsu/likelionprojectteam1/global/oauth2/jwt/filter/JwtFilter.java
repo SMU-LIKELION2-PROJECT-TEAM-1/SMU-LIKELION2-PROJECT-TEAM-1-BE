@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private static final List<String> EXCLUDE_PATHS = List.of(
-            "/", "/oauth2/**", "/error", "/auth/**"
+            "/", "/oauth2/**", "/error", "/auth/**", "/swagger/**", "/swagger-ui/**", "/v3/api-docs/**"
     );
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -73,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private void sendErrorResponse(HttpServletResponse response, ErrorMessage  errorMessage) throws IOException {
+    private void sendErrorResponse(HttpServletResponse response, ErrorMessage errorMessage) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.setStatus(UNAUTHORIZED.value());
         response.setContentType(APPLICATION_JSON_VALUE);
