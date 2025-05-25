@@ -7,8 +7,12 @@ import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
+@SpringBootTest
 class JwtProviderTest {
 
     private JwtProvider jwtProvider;
