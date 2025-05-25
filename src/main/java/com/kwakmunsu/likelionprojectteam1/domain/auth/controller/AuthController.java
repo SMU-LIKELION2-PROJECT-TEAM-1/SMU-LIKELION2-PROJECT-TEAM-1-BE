@@ -3,7 +3,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.auth.controller;
 import com.kwakmunsu.likelionprojectteam1.domain.auth.controller.dto.ReissueTokenRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.auth.service.AuthCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.auth.service.AuthQueryService;
-import com.kwakmunsu.likelionprojectteam1.domain.auth.service.dto.TokenResponse;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
