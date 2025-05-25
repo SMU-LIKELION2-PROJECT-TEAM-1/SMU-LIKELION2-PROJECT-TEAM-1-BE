@@ -1,9 +1,9 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.token;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Role;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.dto.TokenResponse;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
