@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.handler;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

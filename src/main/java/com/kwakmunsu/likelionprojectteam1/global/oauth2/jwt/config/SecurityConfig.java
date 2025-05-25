@@ -1,10 +1,13 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.config;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.filter.JwtFilter;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.handler.JwtAccessDeniedHandler;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.handler.JwtAuthenticationEntryPoint;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.token.JwtProvider;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.handler.CustomOAuth2FailureHandler;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.handler.CustomOAuth2SuccessHandler;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.filter.JwtFilter;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.handler.JwtAccessDeniedHandler;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.handler.JwtAuthenticationEntryPoint;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.provider.JwtProvider;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.service.CustomOAuth2UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler customSuccessHandler;
+    private final CustomOAuth2FailureHandler customOauth2FailureHandler;
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
 
@@ -43,6 +49,14 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated());
 
+        http
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint( //  **사용자 정보(UserInfo)**를 가져오는 엔드포인트를 설정하는 부분
+                                userInfoEndpointConfig -> userInfoEndpointConfig
+                                        .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler)
+                        .failureHandler(customOauth2FailureHandler)
+                );
         http
                 .addFilterBefore(new JwtFilter(jwtProvider, objectMapper), UsernamePasswordAuthenticationFilter.class);
 

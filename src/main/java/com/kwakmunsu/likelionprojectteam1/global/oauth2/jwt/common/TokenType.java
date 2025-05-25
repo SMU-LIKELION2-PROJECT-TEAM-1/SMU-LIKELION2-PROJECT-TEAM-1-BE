@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.common;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.common;
 
 import lombok.Getter;
 
@@ -9,6 +9,7 @@ public enum TokenType {
     BEARER_PREFIX("Bearer "),
     ACCESS("accessToken"),
     REFRESH("refreshToken"),
+    TEMPORARY("temporaryToken")
     ;
 
     private final String value;

@@ -1,13 +1,10 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.token;
-
-import static com.kwakmunsu.likelionprojectteam1.global.jwt.common.TokenExpiration.ACCESS_TOKEN;
-import static com.kwakmunsu.likelionprojectteam1.global.jwt.common.TokenExpiration.REFRESH_TOKEN;
-import static com.kwakmunsu.likelionprojectteam1.global.jwt.common.TokenType.AUTHORIZATION_HEADER;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.provider;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Role;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.dto.TokenResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.common.TokenType;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.common.TokenExpiration;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.common.TokenType;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -53,30 +50,6 @@ public class JwtProvider {
                 .build();
     }
 
-    private String createAccessToken(Long memberId, Role role) {
-        Date date = new Date();
-        Date validity = new Date(date.getTime() + ACCESS_TOKEN.getExpirationTime());
-
-        return Jwts.builder()
-                .subject(String.valueOf(memberId))
-                .claim(CATEGORY_KEY, TokenType.ACCESS.getValue())
-                .claim(AUTHORIZATION_HEADER.getValue(), role)
-                .expiration(validity)
-                .signWith(this.secretKey)
-                .compact();
-    }
-
-    private String createRefreshToken() {
-        Date date = new Date();
-        Date validity = new Date(date.getTime() + REFRESH_TOKEN.getExpirationTime());
-
-        return Jwts.builder()
-                .claim(CATEGORY_KEY, TokenType.REFRESH.getValue())
-                .expiration(validity)
-                .signWith(this.secretKey)
-                .compact();
-    }
-
     public Authentication getAuthentication(String token) {
         String memberId = getClaimsFromToken(token).getSubject();
         // 유저 권한은 하나밖에 없기에 singletonList 로 진행함. 단 하나의 권한만 가질때 사용.
@@ -86,11 +59,6 @@ public class JwtProvider {
                 null,
                 Collections.singletonList(authority)
         );
-    }
-
-    private Role getAuthority(String token) {
-        Claims claimsFromToken = getClaimsFromToken(token);
-        return Role.valueOf(claimsFromToken.get(AUTHORIZATION_HEADER.getValue(), String.class));
     }
 
     public boolean isNotValidateToken(String token) {
@@ -108,6 +76,35 @@ public class JwtProvider {
             log.warn(ErrorMessage.BAD_REQUEST_TOKEN.getMessage() + token);
         }
         return true;
+    }
+
+    private String createAccessToken(Long memberId, Role role) {
+        Date date = new Date();
+        Date validity = new Date(date.getTime() + TokenExpiration.ACCESS_TOKEN.getExpirationTime());
+
+        return Jwts.builder()
+                .subject(String.valueOf(memberId))
+                .claim(CATEGORY_KEY, TokenType.ACCESS.getValue())
+                .claim(TokenType.AUTHORIZATION_HEADER.getValue(), role)
+                .expiration(validity)
+                .signWith(this.secretKey)
+                .compact();
+    }
+
+    private String createRefreshToken() {
+        Date date = new Date();
+        Date validity = new Date(date.getTime() + TokenExpiration.REFRESH_TOKEN.getExpirationTime());
+
+        return Jwts.builder()
+                .claim(CATEGORY_KEY, TokenType.REFRESH.getValue())
+                .expiration(validity)
+                .signWith(this.secretKey)
+                .compact();
+    }
+
+    private Role getAuthority(String token) {
+        Claims claimsFromToken = getClaimsFromToken(token);
+        return Role.valueOf(claimsFromToken.get(TokenType.AUTHORIZATION_HEADER.getValue(), String.class));
     }
 
     private Claims getClaimsFromToken(String token) {

@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.global.jwt.filter;
+package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.filter;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -6,8 +6,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.common.TokenType;
-import com.kwakmunsu.likelionprojectteam1.global.jwt.token.JwtProvider;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.common.TokenType;
+import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.provider.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private static final List<String> EXCLUDE_PATHS = List.of(
-            "/", "/error", "/auth/**"
+            "/", "/oauth2/**", "/error", "/auth/**"
     );
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
