@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.auth.service.dto;
+package com.kwakmunsu.likelionprojectteam1.global.jwt.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
