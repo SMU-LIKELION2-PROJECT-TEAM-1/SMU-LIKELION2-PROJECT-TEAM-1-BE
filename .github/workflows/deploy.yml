@@ -2,10 +2,10 @@ name: CI/CD
 on:
   push:
     branches:
-      - Setting/#11
+      - dev
   pull_request:
     branches:
-      - Setting/#11
+      - dev
 
 jobs:
   Deploy:
