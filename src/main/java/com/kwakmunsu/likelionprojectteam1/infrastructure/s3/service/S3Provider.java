@@ -2,6 +2,7 @@ package com.kwakmunsu.likelionprojectteam1.infrastructure.s3.service;
 
 import com.kwakmunsu.likelionprojectteam1.global.exception.InternalServerException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
+import com.kwakmunsu.likelionprojectteam1.infrastructure.s3.validator.ImageValidator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 public class S3Provider {
 
     private final S3Client s3Client;
+    private final ImageValidator imageValidator;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -29,6 +31,7 @@ public class S3Provider {
     public List<String> uploadImages(List<MultipartFile> files) {
         List<String> images = new ArrayList<>();
         for (MultipartFile file : files) {
+            imageValidator.validateFile(file);
             String image = uploadImage(file);
             images.add(image);
         }
@@ -43,7 +46,6 @@ public class S3Provider {
         return fileName;
     }
 
-    // S3 upload
     private void uploadImageToS3(MultipartFile file, String fileName, S3Client s3Client) {
         try {
             RequestBody requestBody = RequestBody.fromBytes(file.getBytes());

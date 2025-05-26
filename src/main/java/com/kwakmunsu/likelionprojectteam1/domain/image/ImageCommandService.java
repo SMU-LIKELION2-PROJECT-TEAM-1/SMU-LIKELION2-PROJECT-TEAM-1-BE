@@ -1,7 +1,6 @@
 package com.kwakmunsu.likelionprojectteam1.domain.image;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.infrastructure.s3.service.S3Provider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +16,21 @@ public class ImageCommandService {
 
     private final S3Provider s3Provider;
     private final ImageRepository imageRepository;
-    private final RecipeRepository recipeRepository;
 
     @Transactional
-    public void upload(MultipartFile files) {
-        // TODO: 삭제 예정
-        Recipe recipe = recipeRepository.create(Recipe.builder().build());
-        String fileName = s3Provider.uploadImage(files);
-        Image image = Image.builder()
-                .recipe(recipe)
-                .name(fileName)
-                .build();
-        imageRepository.create(image);
+    public void upload(List<MultipartFile> files, Recipe recipe) {
+        List<String> filenames = s3Provider.uploadImages(files);
+
+        for (String filename : filenames) {
+            log.info("name: " + filename);
+
+            Image image = Image.builder()
+                    .recipe(recipe)
+                    .name(filename)
+                    .build();
+            imageRepository.create(image);
+        }
+
     }
 
 }

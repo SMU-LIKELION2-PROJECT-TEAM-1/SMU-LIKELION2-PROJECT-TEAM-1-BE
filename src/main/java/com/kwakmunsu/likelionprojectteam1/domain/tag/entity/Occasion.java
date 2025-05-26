@@ -1,6 +1,6 @@
 package com.kwakmunsu.likelionprojectteam1.domain.tag.entity;
 
-public enum TimeSituation {
+public enum Occasion {
 
     BREAKFAST ("아침"),
     LUNCH     ("점심"),
@@ -11,7 +11,7 @@ public enum TimeSituation {
 
     private final String value;
 
-    TimeSituation(String value) {
+    Occasion(String value) {
         this.value = value;
     }
 

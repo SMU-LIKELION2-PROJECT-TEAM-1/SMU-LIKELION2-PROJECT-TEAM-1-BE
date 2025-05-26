@@ -3,9 +3,12 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.controller;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.RecipePreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeCreateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeUpdateRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipeDetailResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipePaginationResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.WeeklyTop3RecipesResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.RecipeCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +31,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class RecipeController extends RecipeDocsController {
 
+    private final RecipeCommandService recipeCommandService;
+
     // FIXME: image 가 스웨거에 안오라감
     @Override
     @PostMapping
     public ResponseEntity<Void> create(
-            @RequestPart(value = "recipe") RecipeCreateRequest request,
-            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return ResponseEntity.created(URI.create("/recipes/1")).build();
+            @AuthMember Long memberId,
+            @Valid @RequestPart(value = "recipe") RecipeCreateRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        Long recipeId = recipeCommandService.create(request.toServiceRequest(memberId), images);
+        URI uri = URI.create("/recipes/" + recipeId);
+
+        return ResponseEntity.created(uri).build();
     }
 
     @Override
