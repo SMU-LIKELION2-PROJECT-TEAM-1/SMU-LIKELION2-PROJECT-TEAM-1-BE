@@ -22,7 +22,7 @@ public class ImageCommandService {
     @Transactional
     public void upload(MultipartFile files) {
         // TODO: 삭제 예정
-        Recipe recipe = recipeRepository.create(new Recipe());
+        Recipe recipe = recipeRepository.create(Recipe.builder().build());
         String fileName = s3Provider.uploadImage(files);
         Image image = Image.builder()
                 .recipe(recipe)
