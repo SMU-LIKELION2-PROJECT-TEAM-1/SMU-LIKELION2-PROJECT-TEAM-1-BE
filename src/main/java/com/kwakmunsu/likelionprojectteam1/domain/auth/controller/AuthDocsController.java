@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,14 +50,14 @@ public abstract class AuthDocsController {
     public abstract ResponseEntity<TokenResponse> reissue(ReissueTokenRequest request);
 
     @Tag(name = SecurityOverrideCustomizer.UNSECURED)
-    @Operation(summary = "카카오 로그인", description = "카카오 소셜 로그인", security = @SecurityRequirement(name = ""))
+    @Operation(summary = "카카오 로그인",
+            description = "카카오 소셜 로그인. 인증 성공 시 프론트엔드로 리다이렉트되며, 쿼리 파라미터로 accessToken, refreshToken이 전달됩니다.<br>"
+                    + " 예시: http://localhost:3000/?accessToken=...&refreshToken=..."
+    )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "로그인 성공",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = TokenResponse.class))
+                    responseCode = "302",
+                    description = "인증 성공 시 프론트엔드로 리다이렉트"
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -73,14 +72,14 @@ public abstract class AuthDocsController {
     }
 
     @Tag(name = SecurityOverrideCustomizer.UNSECURED)
-    @Operation(summary = "구글 로그인", description = "구글 소셜 로그인", security = @SecurityRequirement(name = "public"))
+    @Operation(summary = "구글 로그인",
+            description = "구글 소셜 로그인. 인증 성공 시 프론트엔드로 리다이렉트되며, 쿼리 파라미터로 accessToken, refreshToken이 전달됩니다.<br>"
+                    + " 예시: http://localhost:3000/?accessToken=...&refreshToken=..."
+    )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "로그인 성공",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = TokenResponse.class))
+                    responseCode = "302",
+                    description = "인증 성공 시 프론트엔드로 리다이렉트"
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -93,4 +92,5 @@ public abstract class AuthDocsController {
     @GetMapping("/oauth2/authorization/google")
     public void google() {
     }
+
 }
