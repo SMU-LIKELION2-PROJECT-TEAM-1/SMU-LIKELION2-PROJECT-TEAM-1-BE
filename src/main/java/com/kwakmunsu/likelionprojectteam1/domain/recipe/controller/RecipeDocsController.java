@@ -2,9 +2,10 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeCreateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeUpdateRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipeDetailResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipePaginationResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.WeeklyTop3RecipesResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,10 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value.Str;
 
 @Tag(name = "Recipe Controller", description = "Recipe API")
 public abstract class RecipeDocsController {
@@ -28,7 +26,7 @@ public abstract class RecipeDocsController {
             summary = "레시피 등록 - JWT O",
             description = """
                     레시피 게시글을 생성합니다.<br>
-                    - 게시판 종류, 제목, 소개, 태그(시간/상황, 조리 시간, 목적, 음식 종류), 난이도, 재료, 조리법을 입력할 수 있습니다.
+                    - 게시판 종류, 제목, 소개, 조리 시간, 태그(시간/상황, 목적, 음식 종류), 난이도, 재료, 조리법을 입력할 수 있습니다.
                     - 이미지는 여러 장 업로드할 수 있으며, 생략 가능합니다.
                     - 게시글 생성 시 Header 안에 Location에 담아서 uri를 반환합니다.
                     """
@@ -36,7 +34,7 @@ public abstract class RecipeDocsController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "레시피 등록 성공, 레시피 id를 반환합니다."
+                    description = "레시피 등록 성공, Header 안에 Location에 uri를 담아서 반환합니다."
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -48,6 +46,7 @@ public abstract class RecipeDocsController {
             )
     })
     public abstract ResponseEntity<Void> create(
+            @AuthMember Long memberId,
             RecipeCreateRequest request,
             @Parameter(
                     description = "업로드할 이미지 파일 리스트 (여러 장 가능, 생략 가능)",

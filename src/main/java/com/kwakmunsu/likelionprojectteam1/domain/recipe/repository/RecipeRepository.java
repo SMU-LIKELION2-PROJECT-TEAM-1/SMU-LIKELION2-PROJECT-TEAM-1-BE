@@ -10,7 +10,7 @@ public class RecipeRepository {
 
     private final RecipeJpaRepository recipeJpaRepository;
 
-    public Recipe create(Recipe recipe) {
+    public Recipe save(Recipe recipe) {
        return recipeJpaRepository.save(recipe);
     }
 
