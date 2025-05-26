@@ -1,7 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto;
 
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipeAuthorResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.RecipeCountResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto;
+package com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
