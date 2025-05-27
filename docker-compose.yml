@@ -1,0 +1,29 @@
+services:
+  likelion-db:
+    image: mysql:8.0.41
+    container_name: likelion-mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 974300
+      MYSQL_DATABASE: likelion
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - 3305:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping" ]
+      interval: 3s
+      retries: 10
+
+#  likelion-server:
+#    build: .
+#    container_name: likelion-springboot-container
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      likelion-db:
+#        condition: service_healthy
+
+  redis-server:
+    image: redis
+    ports:
+      - 6379:6379
