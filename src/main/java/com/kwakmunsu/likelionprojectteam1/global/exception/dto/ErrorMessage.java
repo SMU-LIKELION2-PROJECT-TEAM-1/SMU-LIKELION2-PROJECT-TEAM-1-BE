@@ -18,6 +18,10 @@ public enum ErrorMessage {
     MODIFY_UNAUTHORIZED_RECIPE("ERROR - 수정 권한이 없습니다."),
     DELETE_UNAUTHORIZED_RECIPE("ERROR - 삭제 권한이 없습니다."),
 
+    // <=============== COMMENT ===============>
+    NOT_FOUND_COMMENT("ERROR - 해당 댓글을 찾을 수 없습니다."),
+    BAD_REQUEST_COMMENT("ERROR - 잘못된 댓글 요청"),
+
     // <=============== JWT ===============>
     TOKEN_EXPIRED("ERROR - JWT 토큰 만료"),
     INVALID_TOKEN("ERROR - 유효하지 않은 토큰입니다."),
@@ -38,6 +42,8 @@ public enum ErrorMessage {
     UNAUTHORIZED_ERROR("ERROR - 인증되지 않은 사용자입니다."),
     FORBIDDEN_ERROR("ERROR - 접근 권한이 없습니다."),
     BAD_REQUEST_ARGUMENT("ERROR - 유효하지 않은 인자입니다."),
+    MODIFY_UNAUTHORIZED("ERROR - 수정 권한이 없습니다."),
+    DELETE_UNAUTHORIZED("ERROR - 삭제 권한이 없습니다."),
     ;
 
     private final String message;
