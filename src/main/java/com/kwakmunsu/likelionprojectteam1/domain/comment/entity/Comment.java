@@ -27,6 +27,9 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "parent_comment_id")
+    private Long parentCommentId;  // 부모 댓글 (대댓글 구현 가능)
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -38,19 +41,39 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private Comment(
             Member member,
             Recipe recipe,
+            Long parentCommentId,
             String content
     ) {
         this.member = member;
         this.recipe = recipe;
+        this.parentCommentId = parentCommentId;
         this.content = content;
     }
 
     public void updateContent(String newContent) {
         this.content = newContent;
+    }
+
+    public static Comment create(
+            Member member,
+            Recipe recipe,
+            Long parentCommentId,
+            String content
+    ) {
+        return Comment.builder()
+                .member(member)
+                .recipe(recipe)
+                .parentCommentId(parentCommentId)
+                .content(content)
+                .build();
+    }
+
+    public boolean isRoot() {
+        return parentCommentId == null;
     }
 
 }

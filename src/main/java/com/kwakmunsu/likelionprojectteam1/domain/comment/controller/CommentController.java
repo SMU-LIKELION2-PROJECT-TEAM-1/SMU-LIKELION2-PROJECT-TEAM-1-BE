@@ -1,7 +1,11 @@
 package com.kwakmunsu.likelionprojectteam1.domain.comment.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.comment.controller.dto.CommentCreateRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.comment.controller.dto.CommentUpdateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.service.CommentCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.response.CommentCreateResponse;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,22 +25,32 @@ public class CommentController extends CommentDocsController {
 
     @Override
     @PostMapping("{recipeId}/comments")
-    public ResponseEntity<Long> create(
+    public ResponseEntity<CommentCreateResponse> create(
+            @AuthMember Long memberId,
             @PathVariable(name = "recipeId") Long recipeId,
-            @RequestBody CommentCreateRequest request
+            @Valid @RequestBody CommentCreateRequest request
     ) {
-        return ResponseEntity.ok(1L);
-    }
-
-    @Override
-    @DeleteMapping("{commentId}/comments")
-    public ResponseEntity<Void> delete(@PathVariable Long commentId) {
-        return ResponseEntity.noContent().build();
+        CommentCreateResponse response = commentCommandService.create(request.toServiceRequest(memberId), recipeId);
+        return ResponseEntity.ok(response);
     }
 
     @Override
     @PatchMapping("{commentId}/comments")
-    public ResponseEntity<Void> update(@PathVariable Long commentId) {
+    public ResponseEntity<Void> update(
+            @AuthMember Long memberId,
+            @PathVariable(name = "commentId") Long commentId,
+            @Valid @RequestBody CommentUpdateRequest request
+    ) {
+        commentCommandService.update(request.toServiceRequest(memberId), commentId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @DeleteMapping("{commentId}/comments")
+    public ResponseEntity<Void> delete(@AuthMember Long memberId, @PathVariable Long commentId) {
+        commentCommandService.delete(commentId, memberId);
+
         return ResponseEntity.noContent().build();
     }
 

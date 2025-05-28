@@ -47,7 +47,7 @@ public abstract class RecipeDocsController {
             )
     })
     public abstract ResponseEntity<Void> create(
-            @AuthMember Long memberId,
+            Long memberId,
             RecipeCreateRequest request,
             @Parameter(
                     description = "업로드할 이미지 파일 리스트 (여러 장 가능, 생략 가능)",
