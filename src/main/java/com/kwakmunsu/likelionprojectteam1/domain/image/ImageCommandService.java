@@ -30,7 +30,16 @@ public class ImageCommandService {
                     .build();
             imageRepository.create(image);
         }
+    }
 
+    public void delete(List<String> imageUrls) {
+        // db 삭제
+        for(String url : imageUrls) {
+            log.info(url);
+            imageRepository.deleteByName(url);
+        }
+        // s3 삭제
+        s3Provider.deleteImages(imageUrls);
     }
 
 }
