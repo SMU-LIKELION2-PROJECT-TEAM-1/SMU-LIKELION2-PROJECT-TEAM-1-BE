@@ -33,7 +33,7 @@ public class RecipeController extends RecipeDocsController {
 
     private final RecipeCommandService recipeCommandService;
 
-    // FIXME: image 가 스웨거에 안오라감
+    // FIXME: image 가 스웨거에 안라감
     @Override
     @PostMapping
     public ResponseEntity<Void> create(
@@ -94,9 +94,12 @@ public class RecipeController extends RecipeDocsController {
     @Override
     @PatchMapping("/{recipeId}")
     public ResponseEntity<Void> update(
+            @AuthMember Long memberId,
             @PathVariable Long recipeId,
-            @RequestBody RecipeUpdateRequest request
+            @Valid @RequestPart(value = "recipe") RecipeUpdateRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
+        recipeCommandService.update(request.toServiceRequest(memberId), recipeId, images);
         return ResponseEntity.noContent().build();
     }
 

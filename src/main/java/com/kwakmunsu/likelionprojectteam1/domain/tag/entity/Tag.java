@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.tag.entity;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
+import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.dto.TagUpdateDomainRequest;
 import com.kwakmunsu.likelionprojectteam1.global.entity.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,6 +50,12 @@ public class Tag extends BaseTimeEntity {
         this.occasion = occasion;
         this.foodType = foodType;
         this.purpose = purpose;
+    }
+
+    public void updateTag(TagUpdateDomainRequest request) {
+        this.occasion = Occasion.valueOf(request.occasion());
+        this.foodType = FoodType.valueOf(request.foodType());
+        this.purpose = Purpose.valueOf(request.purpose());
     }
 
 }
