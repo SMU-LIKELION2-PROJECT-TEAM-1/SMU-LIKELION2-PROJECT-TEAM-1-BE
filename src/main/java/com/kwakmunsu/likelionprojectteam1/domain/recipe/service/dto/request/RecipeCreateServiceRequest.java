@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record RecipeCreateServiceRequest(
         Long memberId,
+        String boardType,
         String title,
         String introduction,
         String occasion,
@@ -13,8 +14,7 @@ public record RecipeCreateServiceRequest(
         String foodType,
         String difficulty,
         String ingredients,
-        String content,
-        String boardType
+        String content
 ) {
 
 }
