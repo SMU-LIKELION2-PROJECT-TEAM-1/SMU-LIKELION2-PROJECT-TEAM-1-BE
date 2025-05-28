@@ -14,6 +14,8 @@ import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Occasion;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Purpose;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Tag;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.repository.TagRepository;
+import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
+import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class RecipeCommandService {
     private final ImageCommandService imageCommandService;
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
+    private final RecipeDeleteService recipeDeleteService;
 
     // TODO: 챌린지 일 경우 유효성 체크 해야함 챌린지 재료가 포함되어 있어야함.
     @Transactional
@@ -54,11 +57,19 @@ public class RecipeCommandService {
         Recipe recipe = recipeRepository.findByIdAndMemberId(recipeId, request.memberId());
         Tag tag = tagRepository.findByRecipeId(recipeId);
 
-        imageCommandService.delete(request.imageUrls());
+        imageCommandService.deleteByUrls(request.imageUrls());
         imageCommandService.upload(files, recipe);
 
         recipe.updateRecipe(request.toRecipeDomainRequest());
         tag.updateTag(request.toTagDomainRequest());
+    }
+
+    public void delete(Long recipeId, Long memberId) {
+        if (recipeRepository.existsByIdAndMemberId(recipeId, memberId)) {
+            recipeDeleteService.deleteByRecipeId(recipeId);
+            return;
+        }
+        throw new UnAuthenticationException(ErrorMessage.DELETE_UNAUTHORIZED_RECIPE.getMessage());
     }
 
     private Tag createTag(RecipeCreateServiceRequest request, Recipe recipe) {

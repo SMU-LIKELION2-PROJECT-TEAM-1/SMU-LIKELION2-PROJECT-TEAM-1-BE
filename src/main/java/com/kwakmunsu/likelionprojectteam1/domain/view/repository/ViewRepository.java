@@ -9,4 +9,8 @@ public class ViewRepository {
 
     private final ViewJpaRepository viewJpaRepository;
 
+    public void deleteByRecipeId(Long recipeId) {
+        viewJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }

@@ -9,4 +9,8 @@ public class LikeRepository {
 
     private final LikeJpaRepository likeJpaRepository;
 
+    public void deleteByRecipeId(Long recipeId) {
+        likeJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }

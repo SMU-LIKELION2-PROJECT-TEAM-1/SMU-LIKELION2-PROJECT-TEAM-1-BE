@@ -7,4 +7,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FavoritesRepository {
 
+    private final FavoritesJpaRepository favoritesJpaRepository;
+
+    public void deleteByRecipeId(Long recipeId) {
+        favoritesJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }
