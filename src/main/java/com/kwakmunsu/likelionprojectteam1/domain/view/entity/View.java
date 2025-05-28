@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.favorites.entity;
+package com.kwakmunsu.likelionprojectteam1.domain.view.entity;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
@@ -17,11 +17,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "favorites")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "view")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Favorites extends BaseTimeEntity {
+public class View extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class Favorites extends BaseTimeEntity {
     private Recipe recipe;
 
     @Builder
-    private Favorites(Member member, Recipe recipe) {
+    private View(Member member, Recipe recipe) {
         this.member = member;
         this.recipe = recipe;
     }

@@ -8,4 +8,6 @@ public interface TagJpaRepository extends JpaRepository<Tag, Long> {
 
     Optional<Tag> findByRecipeId(Long recipeId);
 
+    void deleteByRecipeId(Long recipeId);
+
 }

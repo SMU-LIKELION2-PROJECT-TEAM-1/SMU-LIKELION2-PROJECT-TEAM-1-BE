@@ -26,4 +26,8 @@ public class ImageRepository {
         imageJpaRepository.deleteByName(name);
     }
 
+    public void deleteByRecipeId(Long recipeId) {
+        imageJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }

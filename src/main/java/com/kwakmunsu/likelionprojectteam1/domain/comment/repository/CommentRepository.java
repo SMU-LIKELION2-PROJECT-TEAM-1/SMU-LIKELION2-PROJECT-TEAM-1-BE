@@ -9,4 +9,8 @@ public class CommentRepository {
 
     private final CommentJpaRepository commentJpaRepository;
 
+    public void deleteByRecipeId(Long recipeId) {
+        commentJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }

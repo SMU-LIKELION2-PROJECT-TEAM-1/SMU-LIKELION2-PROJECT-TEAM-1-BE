@@ -301,7 +301,7 @@ public abstract class RecipeDocsController {
                     )
             )
     })
-    public abstract ResponseEntity<Void> delete(Long recipeId);
+    public abstract ResponseEntity<Void> delete(Long memberId, Long recipeId);
 
     @Operation(
             summary = "챌린지 레시피 재료 투표 요청",
