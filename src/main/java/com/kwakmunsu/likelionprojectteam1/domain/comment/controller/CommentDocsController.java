@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.comment.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.comment.controller.dto.CommentCreateRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.comment.controller.dto.CommentUpdateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.response.CommentCreateResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Positive;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -112,7 +112,10 @@ public abstract class CommentDocsController {
             )
     })
     public abstract ResponseEntity<Void> update(
+            Long memberId,
             @Parameter(description = "수정할 댓글의 ID", example = "1", required = true)
-            Long commentId
+            Long commentId,
+            CommentUpdateRequest request
     );
+
 }

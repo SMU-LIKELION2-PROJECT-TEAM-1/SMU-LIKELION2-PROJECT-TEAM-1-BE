@@ -3,6 +3,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.comment.service;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.entity.Comment;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.repository.CommentRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.request.CommentCreateServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.request.CommentUpdateServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.response.CommentCreateResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
@@ -12,6 +13,7 @@ import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,6 +38,12 @@ public class CommentCommandService {
                 savedComment.getContent(),
                 savedComment.getCreatedAt()
         );
+    }
+
+    @Transactional
+    public void update(CommentUpdateServiceRequest request, Long commentId) {
+        Comment comment = commentRepository.findByIdAndMemberId(commentId, request.memberId());
+        comment.updateContent(request.content());
     }
 
     private Long findParent(CommentCreateServiceRequest request) {
