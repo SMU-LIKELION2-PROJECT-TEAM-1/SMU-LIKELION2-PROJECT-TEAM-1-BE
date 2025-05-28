@@ -14,15 +14,6 @@ services:
       interval: 3s
       retries: 10
 
-#  likelion-server:
-#    build: .
-#    container_name: likelion-springboot-container
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      likelion-db:
-#        condition: service_healthy
-
   redis-server:
     image: redis
     ports:
