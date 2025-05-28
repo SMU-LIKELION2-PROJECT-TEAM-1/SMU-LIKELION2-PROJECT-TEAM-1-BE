@@ -39,7 +39,7 @@ public record RecipeCreateRequest(
         String occasion,
 
         @Schema(description = "조리 시간", example = "30", requiredMode = REQUIRED)
-        @Positive
+        @Positive(message = "0보다 커야합니다.")
         int cookingTime,
 
         @Schema(description = "목적 (다이어트 식단, 벌크업 식단, 건강식, 해장용, 혼밥용)", example = "혼밥", requiredMode = REQUIRED)
