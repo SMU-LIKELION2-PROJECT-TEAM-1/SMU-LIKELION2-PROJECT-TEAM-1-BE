@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.comment.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.comment.controller.dto.CommentCreateRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.response.CommentCreateResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -45,7 +47,8 @@ public abstract class CommentDocsController {
                     )
             )
     })
-    public abstract ResponseEntity<Long> create(
+    public abstract ResponseEntity<CommentCreateResponse> create(
+            Long memberId,
             @Parameter(description = "댓글을 작성할 레시피 글의 ID(recipeId)", example = "1", required = true)
             Long recipeId,
             CommentCreateRequest request

@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.repository;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
+import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,11 @@ public class RecipeRepository {
 
     public Recipe save(Recipe recipe) {
         return recipeJpaRepository.save(recipe);
+    }
+
+    public Recipe findById(Long id) {
+        return recipeJpaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_RECIPE.getMessage()));
     }
 
     public Recipe findByIdAndMemberId(Long id, Long memberId) {
