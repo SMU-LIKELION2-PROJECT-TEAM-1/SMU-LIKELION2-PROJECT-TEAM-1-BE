@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FavoritesJpaRepository extends JpaRepository<Favorites, Long> {
 
+    void deleteByRecipeId(Long recipeId);
+
 }

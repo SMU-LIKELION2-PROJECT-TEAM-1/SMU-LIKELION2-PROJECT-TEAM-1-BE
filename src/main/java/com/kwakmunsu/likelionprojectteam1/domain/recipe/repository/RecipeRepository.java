@@ -1,7 +1,6 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.repository;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
-import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,14 @@ public class RecipeRepository {
     public Recipe findByIdAndMemberId(Long id, Long memberId) {
         return recipeJpaRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new UnAuthenticationException(ErrorMessage.MODIFY_UNAUTHORIZED_RECIPE.getMessage()));
+    }
+
+    public boolean existsByIdAndMemberId(Long id, Long memberId) {
+        return recipeJpaRepository.existsByIdAndMemberId(id, memberId);
+    }
+
+    public void deleteById(Long id) {
+        recipeJpaRepository.deleteById(id);
     }
 
 }

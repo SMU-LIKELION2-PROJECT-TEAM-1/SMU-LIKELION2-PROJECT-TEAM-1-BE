@@ -32,14 +32,29 @@ public class ImageCommandService {
         }
     }
 
-    public void delete(List<String> imageUrls) {
+    public void deleteByUrls(List<String> imageUrls) {
         // db 삭제
-        for(String url : imageUrls) {
+        deleteFromDatabase(imageUrls);
+        // s3 삭제
+        s3Provider.deleteImages(imageUrls);
+    }
+
+    public void deleteByRecipeId(Long recipeId) {
+        List<String> imageUrls = imageRepository.findByRecipeId(recipeId);
+
+        if (imageUrls.isEmpty()) {
+            return;
+        }
+
+        imageRepository.deleteByRecipeId(recipeId);
+        s3Provider.deleteImages(imageUrls);
+    }
+
+    private void deleteFromDatabase(List<String> imageUrls) {
+        for (String url : imageUrls) {
             log.info(url);
             imageRepository.deleteByName(url);
         }
-        // s3 삭제
-        s3Provider.deleteImages(imageUrls);
     }
 
 }

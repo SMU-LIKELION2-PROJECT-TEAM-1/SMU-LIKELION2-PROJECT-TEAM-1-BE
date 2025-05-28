@@ -37,6 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
 class RecipeCommandServiceTest {
 
     @Mock
+    private RecipeDeleteService recipeDeleteService;
+
+    @Mock
     private RecipeRepository recipeRepository;
 
     @Mock
@@ -78,7 +81,7 @@ class RecipeCommandServiceTest {
 
     @DisplayName("레시피를 생성 시 회원을 찾을 수 없다면 예외를 반환한다.")
     @Test
-    void throwsExceptionWhenNotExistedRecipe() {
+    void throwsExceptionWhenNotExistsMember() {
         // given
         Long memberId = 1L;
         given(memberRepository.findById(memberId))
@@ -128,7 +131,7 @@ class RecipeCommandServiceTest {
 
         // then
         verify(recipeRepository).findByIdAndMemberId(1L, 1L);
-        verify(imageCommandService).delete(request.imageUrls());
+        verify(imageCommandService).deleteByUrls(request.imageUrls());
         verify(imageCommandService).upload(list, recipe);
         assertThat(recipe.getContent()).isEqualTo("update-content");
         assertThat(recipe.getIngredients()).isEqualTo("update-ingredient1, update-ingredient2");
@@ -137,7 +140,7 @@ class RecipeCommandServiceTest {
 
     @DisplayName("수정 요청 시 작성자가 아닐 경우 예외를 반환한다.")
     @Test
-    void throwsExceptionWhenNotWriter() {
+    void throwsExceptionWhenMemberHasNoUpdatePermission() {
         // given
         RecipeUpdateServiceRequest request = getRecipeUpdateServiceRequest(1L);
         List<MultipartFile> list = new ArrayList<>();
@@ -148,6 +151,35 @@ class RecipeCommandServiceTest {
         assertThatThrownBy(() -> recipeCommandService.update(request, 1L, list))
                 .isInstanceOf(UnAuthenticationException.class)
                 .hasMessage(ErrorMessage.MODIFY_UNAUTHORIZED_RECIPE.getMessage());
+    }
+
+    @DisplayName("레시피를 삭제한다")
+    @Test
+    void deleteRecipe() {
+        // given
+        Long recipeId = 1L;
+        Long memberId = 1L;
+        given(recipeRepository.existsByIdAndMemberId(any(Long.class), any(Long.class))).willReturn(true);
+
+        // when
+        recipeCommandService.delete(recipeId, memberId);
+
+        // then
+        verify(recipeDeleteService).deleteByRecipeId(recipeId);
+    }
+
+    @DisplayName("삭제 권한이 없을 경우 예외를 반환한다.")
+    @Test
+    void throwsExceptionWhenMemberHasNoDeletePermission() {
+        // given
+        Long recipeId = 1L;
+        Long memberId = 1L;
+        given(recipeRepository.existsByIdAndMemberId(any(Long.class), any(Long.class))).willReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> recipeCommandService.delete(recipeId, memberId))
+                .isInstanceOf(UnAuthenticationException.class)
+                .hasMessage(ErrorMessage.DELETE_UNAUTHORIZED_RECIPE.getMessage());
     }
 
     private RecipeCreateServiceRequest getRecipeCreateServiceRequest(Long memberId) {
@@ -183,7 +215,7 @@ class RecipeCommandServiceTest {
                 .build();
     }
 
-    public Recipe getRecipe() {
+    private Recipe getRecipe() {
         return Recipe.builder()
                 .title("test-title")
                 .introduction("test-introduction")

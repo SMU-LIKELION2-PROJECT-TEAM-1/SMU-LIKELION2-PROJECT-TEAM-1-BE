@@ -20,4 +20,8 @@ public class TagRepository {
                 .orElseThrow(() -> new NotFoundException("해당 레시피의 Tag를 찾을 수 없습니다."));
     }
 
+    public void deleteByRecipeId(Long recipeId) {
+        tagJpaRepository.deleteByRecipeId(recipeId);
+    }
+
 }

@@ -105,7 +105,11 @@ public class RecipeController extends RecipeDocsController {
 
     @Override
     @DeleteMapping("/{recipeId}")
-    public ResponseEntity<Void> delete(@PathVariable Long recipeId) {
+    public ResponseEntity<Void> delete(
+            @AuthMember Long memberId,
+            @PathVariable Long recipeId
+    ) {
+        recipeCommandService.delete(memberId, recipeId);
         return ResponseEntity.noContent().build();
     }
 
