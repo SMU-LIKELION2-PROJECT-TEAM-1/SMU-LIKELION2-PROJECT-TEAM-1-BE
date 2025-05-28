@@ -2,6 +2,8 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -96,7 +98,7 @@ class RecipeControllerTest {
         );
 
         MockMultipartFile recipePart = new MockMultipartFile(
-                "request",
+                "recipe",
                 null,
                 "application/json",
                 objectMapper.writeValueAsBytes(request)
@@ -115,7 +117,21 @@ class RecipeControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isNoContent());
+    }
 
+    @DisplayName("레시피를 삭제한다.")
+    @TestMember
+    @Test
+    void deleteRecipe() throws Exception{
+        // given
+        Long recipeId = 1L;
+        // expected
+        mockMvc.perform(
+                        delete(BASE_URL + "/{recipeId}", recipeId)
+                )
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        verify(recipeCommandService).delete(any(), any());
     }
 
     @DisplayName("레시피 생성 요청 값 유효성 테스트")
