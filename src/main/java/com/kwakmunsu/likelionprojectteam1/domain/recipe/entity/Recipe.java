@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.entity;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.dto.RecipeUpdateDomainRequest;
 import com.kwakmunsu.likelionprojectteam1.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,6 +75,17 @@ public class Recipe extends BaseTimeEntity {
         this.boardType = boardType;
         this.ingredients = ingredients;
         this.content = content;
+    }
+
+    // 앞단에서 유효성 검증을 마쳤기에 따로 검증을 진행하지 않음.
+    public void updateRecipe(RecipeUpdateDomainRequest request) {
+        this.title = request.title();
+        this.introduction = request.introduction();
+        this.cookingTime = request.cookingTime();
+        this.difficulty = Difficulty.valueOf(request.difficulty());
+        this.boardType = BoardType.valueOf(request.boardType());
+        this.ingredients = request.ingredients();
+        this.content = request.content();
     }
 
 }

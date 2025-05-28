@@ -8,6 +8,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Difficulty;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeCreateServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeUpdateServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.FoodType;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Occasion;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Purpose;
@@ -28,7 +29,7 @@ public class RecipeCommandService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
 
-     // TODO: 챌린지 일 경우 유효성 체크 해야함 챌린지 재료가 포함되어 있어야함.
+    // TODO: 챌린지 일 경우 유효성 체크 해야함 챌린지 재료가 포함되어 있어야함.
     @Transactional
     public Long create(RecipeCreateServiceRequest request, List<MultipartFile> images) {
         Member member = memberRepository.findById(request.memberId());
@@ -42,6 +43,22 @@ public class RecipeCommandService {
         imageCommandService.upload(images, savedRecipe);
 
         return savedRecipe.getId();
+    }
+
+    @Transactional
+    public void update(
+            RecipeUpdateServiceRequest request,
+            Long recipeId,
+            List<MultipartFile> files
+    ) {
+        Recipe recipe = recipeRepository.findByIdAndMemberId(recipeId, request.memberId());
+        Tag tag = tagRepository.findByRecipeId(recipeId);
+
+        imageCommandService.delete(request.imageUrls());
+        imageCommandService.upload(files, recipe);
+
+        recipe.updateRecipe(request.toRecipeDomainRequest());
+        tag.updateTag(request.toTagDomainRequest());
     }
 
     private Tag createTag(RecipeCreateServiceRequest request, Recipe recipe) {

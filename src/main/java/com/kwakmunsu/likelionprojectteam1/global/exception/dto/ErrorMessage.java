@@ -15,6 +15,9 @@ public enum ErrorMessage {
     // <=============== RECIPE ===============>
     NOT_FOUND_RECIPE("ERROR - 해당 일기를 찾을 수 없습니다."),
     BAD_REQUEST_RECIPE("ERROR - 잘못된 일기 요청"),
+    BAD__RECIPE("ERROR - 잘못된 일기 요청"),
+    MODIFY_UNAUTHORIZED_RECIPE("ERROR - 수정 권한이 없습니다."),
+    DELETE_UNAUTHORIZED_RECIPE("ERROR - 삭제 권한이 없습니다."),
 
     // <=============== JWT ===============>
     TOKEN_EXPIRED("ERROR - JWT 토큰 만료"),

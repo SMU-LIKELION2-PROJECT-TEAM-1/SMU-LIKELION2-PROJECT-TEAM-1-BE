@@ -11,13 +11,19 @@ import static org.mockito.Mockito.verify;
 import com.kwakmunsu.likelionprojectteam1.domain.image.ImageCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Difficulty;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeCreateServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeUpdateServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Tag;
 import com.kwakmunsu.likelionprojectteam1.domain.tag.repository.TagRepository;
 import com.kwakmunsu.likelionprojectteam1.global.exception.BadRequestException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
+import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,6 +111,45 @@ class RecipeCommandServiceTest {
                 .hasMessage(ErrorMessage.INVALID_FILE_EXTENSION.getMessage());
     }
 
+    @DisplayName("레시피를 수정한다.")
+    @Test
+    void recipeUpdate() {
+        // given
+        Long memberId = 1L;
+        RecipeUpdateServiceRequest request = getRecipeUpdateServiceRequest(memberId);
+        List<MultipartFile> list = new ArrayList<>();
+        Recipe recipe = getRecipe();
+        Tag tag = mock(Tag.class);
+        given(recipeRepository.findByIdAndMemberId(any(Long.class), any(Long.class))).willReturn(recipe);
+        given(tagRepository.findByRecipeId(any(Long.class))).willReturn(tag);
+
+        // when
+        recipeCommandService.update(request, 1L, list);
+
+        // then
+        verify(recipeRepository).findByIdAndMemberId(1L, 1L);
+        verify(imageCommandService).delete(request.imageUrls());
+        verify(imageCommandService).upload(list, recipe);
+        assertThat(recipe.getContent()).isEqualTo("update-content");
+        assertThat(recipe.getIngredients()).isEqualTo("update-ingredient1, update-ingredient2");
+        assertThat(recipe.getBoardType()).isEqualTo(BoardType.DAILY);
+    }
+
+    @DisplayName("수정 요청 시 작성자가 아닐 경우 예외를 반환한다.")
+    @Test
+    void throwsExceptionWhenNotWriter() {
+        // given
+        RecipeUpdateServiceRequest request = getRecipeUpdateServiceRequest(1L);
+        List<MultipartFile> list = new ArrayList<>();
+        given(recipeRepository.findByIdAndMemberId(any(Long.class), any(Long.class)))
+                .willThrow(new UnAuthenticationException(ErrorMessage.MODIFY_UNAUTHORIZED_RECIPE.getMessage()));
+
+        // when & then
+        assertThatThrownBy(() -> recipeCommandService.update(request, 1L, list))
+                .isInstanceOf(UnAuthenticationException.class)
+                .hasMessage(ErrorMessage.MODIFY_UNAUTHORIZED_RECIPE.getMessage());
+    }
+
     private RecipeCreateServiceRequest getRecipeCreateServiceRequest(Long memberId) {
         return RecipeCreateServiceRequest.builder()
                 .memberId(memberId)
@@ -118,6 +163,36 @@ class RecipeCommandServiceTest {
                 .occasion("BREAKFAST")
                 .foodType("KOREAN")
                 .purpose("BULK_UP")
+                .build();
+    }
+
+    private RecipeUpdateServiceRequest getRecipeUpdateServiceRequest(Long memberId) {
+        return RecipeUpdateServiceRequest.builder()
+                .memberId(memberId)
+                .boardType("DAILY")
+                .title("update-title")
+                .cookingTime(10)
+                .difficulty("HIGH")
+                .ingredients("update-ingredient1, update-ingredient2")
+                .introduction("소개")
+                .content("update-content")
+                .occasion("BREAKFAST")
+                .foodType("KOREAN")
+                .purpose("BULK_UP")
+                .imageUrls(List.of("test1", "test2"))
+                .build();
+    }
+
+    public Recipe getRecipe() {
+        return Recipe.builder()
+                .title("test-title")
+                .introduction("test-introduction")
+                .cookingTime(10)
+                .content("test-content")
+                .ingredients("test-ingredients")
+                .content("test-content")
+                .boardType(BoardType.CHALLENGE)
+                .difficulty(Difficulty.LOW)
                 .build();
     }
 

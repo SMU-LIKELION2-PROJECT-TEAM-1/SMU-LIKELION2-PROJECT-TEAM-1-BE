@@ -1,17 +1,13 @@
-package com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request;
+package com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.dto;
 
 import lombok.Builder;
 
 @Builder
-public record RecipeCreateServiceRequest(
-        Long memberId,
+public record RecipeUpdateDomainRequest(
         String boardType,
         String title,
         String introduction,
-        String occasion,
         int cookingTime,
-        String purpose,
-        String foodType,
         String difficulty,
         String ingredients,
         String content
