@@ -29,6 +29,7 @@ public abstract class RecipeDocsController {
                     - 게시판 종류, 제목, 소개, 조리 시간, 태그(시간/상황, 목적, 음식 종류), 난이도, 재료, 조리법을 입력할 수 있습니다.
                     - 이미지는 여러 장 업로드할 수 있으며, 생략 가능합니다.
                     - 게시글 생성 시 Header 안에 Location에 담아서 uri를 반환합니다.
+                    - 파일은 multipart/form-data 형식입니다. 현재 오류로 인해 swagger 에서 표시 안됨
                     """
     )
     @ApiResponses(value = {
@@ -240,7 +241,10 @@ public abstract class RecipeDocsController {
 
     @Operation(
             summary = "레시피 글 수정 요청",
-            description = "작성자만이 레시피를 수정 할 수 있습니다."
+            description = """
+                    작성자만이 레시피를 수정 할 수 있습니다. 수정된 값만 보내는 것이 아니라 전체를 다 보낸다.<br>
+                    - 파일은 multipart/form-data 형식입니다. 현재 오류로 인해 swagger 에서 표시 안됨
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -264,7 +268,12 @@ public abstract class RecipeDocsController {
                     )
             )
     })
-    public abstract ResponseEntity<Void> update(Long recipeId, RecipeUpdateRequest request);
+    public abstract ResponseEntity<Void> update(
+            Long memberId,
+            Long recipeId,
+            RecipeUpdateRequest request,
+            List<MultipartFile> images
+            );
 
     @Operation(
             summary = "레시피 글 삭제 요청",
@@ -329,7 +338,6 @@ public abstract class RecipeDocsController {
             )
 
     })
-    public abstract ResponseEntity<Void> vote( Long ingredientId);
-
+    public abstract ResponseEntity<Void> vote(Long ingredientId);
 
 }
