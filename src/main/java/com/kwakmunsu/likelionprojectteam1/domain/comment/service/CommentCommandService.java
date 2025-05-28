@@ -10,6 +10,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberReposit
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
+import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,14 @@ public class CommentCommandService {
     public void update(CommentUpdateServiceRequest request, Long commentId) {
         Comment comment = commentRepository.findByIdAndMemberId(commentId, request.memberId());
         comment.updateContent(request.content());
+    }
+
+    public void delete(Long commentId, Long memberId) {
+        if (commentRepository.existsByIdAndMemberId(commentId, memberId)) {
+            commentRepository.deleteById(commentId);
+            return;
+        }
+        throw new UnAuthenticationException(ErrorMessage.DELETE_UNAUTHORIZED.getMessage());
     }
 
     private Long findParent(CommentCreateServiceRequest request) {

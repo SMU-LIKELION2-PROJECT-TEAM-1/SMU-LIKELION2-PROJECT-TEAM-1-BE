@@ -48,7 +48,9 @@ public class CommentController extends CommentDocsController {
 
     @Override
     @DeleteMapping("{commentId}/comments")
-    public ResponseEntity<Void> delete(@PathVariable Long commentId) {
+    public ResponseEntity<Void> delete(@AuthMember Long memberId, @PathVariable Long commentId) {
+        commentCommandService.delete(commentId, memberId);
+
         return ResponseEntity.noContent().build();
     }
 

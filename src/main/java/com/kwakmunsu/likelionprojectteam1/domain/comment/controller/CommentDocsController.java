@@ -72,8 +72,8 @@ public abstract class CommentDocsController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "댓글을 찾을 수 없습니다.",
+                    responseCode = "401",
+                    description = "수정 권한이 없습니다.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class)
@@ -81,6 +81,7 @@ public abstract class CommentDocsController {
             )
     })
     public abstract ResponseEntity<Void> delete(
+            Long memberId,
             @Parameter(description = "삭제할 댓글의 ID", example = "1", required = true)
             Long commentId
     );
@@ -103,8 +104,8 @@ public abstract class CommentDocsController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "댓글을 찾을 수 없습니다.",
+                    responseCode = "401",
+                    description = "수정 권한이 없습니다.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class)

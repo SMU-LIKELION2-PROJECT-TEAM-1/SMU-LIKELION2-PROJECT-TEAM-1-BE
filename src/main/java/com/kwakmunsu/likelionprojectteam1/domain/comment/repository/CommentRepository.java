@@ -25,6 +25,14 @@ public class CommentRepository {
         commentJpaRepository.deleteByRecipeId(recipeId);
     }
 
+    public boolean existsByIdAndMemberId(Long id, Long memberId) {
+        return commentJpaRepository.existsByIdAndMemberId(id, memberId);
+    }
+
+    public void deleteById(Long id) {
+        commentJpaRepository.deleteById(id);
+    }
+
     public Comment findByIdAndMemberId(Long id, Long memberId) {
         return commentJpaRepository.findByIdAndMemberId(id, memberId)
                 .orElseThrow(() -> new UnAuthenticationException(ErrorMessage.MODIFY_UNAUTHORIZED.getMessage()));
