@@ -8,4 +8,6 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findBySocialId(String socialId);
 
+    Optional<Member> findByRefreshToken(String token);
+
 }

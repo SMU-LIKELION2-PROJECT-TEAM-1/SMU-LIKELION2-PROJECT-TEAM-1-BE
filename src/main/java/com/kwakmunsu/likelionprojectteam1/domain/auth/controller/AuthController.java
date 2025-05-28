@@ -22,10 +22,7 @@ public class AuthController extends AuthDocsController {
     @Override
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponse> reissue(@RequestBody ReissueTokenRequest request) {
-        TokenResponse response = TokenResponse.builder()
-                .accessToken("mock-access-token")
-                .refreshToken("mock-refresh-token")
-                .build();
+        TokenResponse response = authCommandService.reissue(request.refreshToken());
 
         return ResponseEntity.ok(response);
     }
