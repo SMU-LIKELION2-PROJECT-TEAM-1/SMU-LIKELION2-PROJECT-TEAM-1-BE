@@ -26,4 +26,9 @@ public class MemberRepository {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER.getMessage()));
     }
 
+    public Member findByRefreshToken(String refreshToken) {
+        return memberJpaRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TOKEN.getMessage()));
+    }
+
 }

@@ -9,11 +9,9 @@ import lombok.Builder;
 @Builder
 public record ReissueTokenRequest(
 
-        @Schema(description = "AccessToken", example = "your-access-token", requiredMode = REQUIRED)
-        String accessToken,
-
         @Schema(description = "refreshToken 토큰", example = "your-refresh-token", requiredMode = REQUIRED)
         String refreshToken
+
 ) {
 
 }
