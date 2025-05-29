@@ -1,5 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.repository;
 
+import com.kwakmunsu.likelionprojectteam1.domain.member.entity.MyPageOption;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Repository;
 public class RecipeRepository {
 
     private final RecipeJpaRepository recipeJpaRepository;
+    private final RecipeQueryDslRepository recipeQueryDslRepository;
 
     public Recipe save(Recipe recipe) {
         return recipeJpaRepository.save(recipe);
@@ -33,6 +36,10 @@ public class RecipeRepository {
 
     public void deleteById(Long id) {
         recipeJpaRepository.deleteById(id);
+    }
+
+    public RecipeInfinityPreviewResponse findByMemberId(Long memberId, Long lastRecipeId, MyPageOption option) {
+        return recipeQueryDslRepository.findByMemberId(memberId, lastRecipeId, option);
     }
 
 }
