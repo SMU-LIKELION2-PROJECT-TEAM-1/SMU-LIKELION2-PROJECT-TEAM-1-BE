@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.favorites.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.favorites.service.FavoritesCommandService;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,14 +19,13 @@ public class FavoritesController extends FavoritesDocsController {
 
     @Override
     @PostMapping("/{recipeId}")
-    public ResponseEntity<Void> favorites(@PathVariable(name = "recipeId") Long recipeId) {
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<Void> favorites(
+            @AuthMember Long memberId,
+            @PathVariable(name = "recipeId") Long recipeId
+    ) {
+        favoritesCommandService.favorites(recipeId, memberId);
 
-    @Override
-    @DeleteMapping("/{recipeId}")
-    public ResponseEntity<Void> unFavorites(@PathVariable(name = "recipeId") Long recipeId) {
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

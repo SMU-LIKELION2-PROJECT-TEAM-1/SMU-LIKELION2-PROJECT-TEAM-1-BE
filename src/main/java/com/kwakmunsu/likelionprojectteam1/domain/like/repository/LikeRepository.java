@@ -13,6 +13,7 @@ public class LikeRepository {
     public void deleteByRecipeId(Long recipeId) {
         likeJpaRepository.deleteByRecipeId(recipeId);
     }
+
     public boolean existsByRecipeIdAndMemberId(Long recipeId, Long memberId ) {
         return likeJpaRepository.existsByRecipeIdAndMemberId(recipeId, memberId);
     }

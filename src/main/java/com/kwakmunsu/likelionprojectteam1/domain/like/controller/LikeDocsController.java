@@ -13,12 +13,7 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Like Controller", description = "Like API")
 public abstract class LikeDocsController {
 
-    @Operation(
-            summary = "레시피 좋아요 등록 및 취소 - JWT O",
-            description = """
-                     특정 레시피에 좋아요를 등록하거나 취소 합니다.
-                    """
-    )
+    @Operation(summary = "레시피 좋아요 등록 및 취소 - JWT O")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

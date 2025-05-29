@@ -7,4 +7,8 @@ public interface FavoritesJpaRepository extends JpaRepository<Favorites, Long> {
 
     void deleteByRecipeId(Long recipeId);
 
+    boolean existsByRecipeIdAndMemberId(Long recipeId, Long memberId);
+
+    void deleteByRecipeIdAndMemberId(Long recipeId, Long memberId);
+
 }
