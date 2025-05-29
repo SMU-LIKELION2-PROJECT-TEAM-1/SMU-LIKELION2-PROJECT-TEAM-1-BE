@@ -31,6 +31,7 @@ public abstract class FavoritesDocsController {
                     )),
     })
     public abstract ResponseEntity<Void> favorites(
+            Long memberId,
             @Parameter(description = "찜을 등록하거나 취소할 레시피의 ID", example = "123", required = true)
             Long recipeId
     );
