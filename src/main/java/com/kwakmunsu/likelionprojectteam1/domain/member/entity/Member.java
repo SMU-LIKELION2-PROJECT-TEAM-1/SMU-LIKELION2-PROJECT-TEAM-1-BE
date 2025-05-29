@@ -86,7 +86,7 @@ public class Member {
                 .nickname(nickname)
                 .profileUrl(profileUrl)
                 .role(Role.MEMBER)
-                .grade(Grade.BRONZE)
+                .grade(Grade.SEEDLING_CHEF)
                 .point(0)
                 .socialId(socialId)
                 .socialType(socialType)

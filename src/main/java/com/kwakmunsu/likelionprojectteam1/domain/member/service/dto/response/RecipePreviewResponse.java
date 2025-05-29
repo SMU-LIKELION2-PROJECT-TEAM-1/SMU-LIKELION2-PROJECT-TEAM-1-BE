@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto;
+package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
@@ -7,6 +7,9 @@ import lombok.Builder;
 
 @Builder
 public record RecipePreviewResponse(
+
+        @Schema(description = "레시피 id", example = "1")
+        Long id,
 
         @Schema(description = "https://example.com/image.jpg")
         String thumbnail,
@@ -17,7 +20,7 @@ public record RecipePreviewResponse(
         @Schema(description = "레시피 소개", example = "Easy and fluffy pancakes recipe.")
         String introduction,
 
-        @Schema(description = "레시피 난이도", example = "상")
+        @Schema(description = "레시피 난이도", example = "HIGH")
         String difficulty,
 
         RecipeAuthorResponse authorResponse,
