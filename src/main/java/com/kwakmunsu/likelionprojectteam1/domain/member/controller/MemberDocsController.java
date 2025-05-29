@@ -1,9 +1,9 @@
 package com.kwakmunsu.likelionprojectteam1.domain.member.controller;
 
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.CommentRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.FavoritesRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.LikeRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.MemberInfoResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.CommentRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.FavoritesRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.LikeRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.MemberInfoResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,10 @@ public abstract class MemberDocsController {
 
     @Operation(
             summary = "내 정보 조회 - JWT O",
-            description = "내 정보(프로필 사진, 이메일, 닉네임, 등급, 등급 점수)를 조회합니다."
+            description = """
+                    내 정보(프로필 사진, 이메일, 닉네임, 등급, 등급 점수)를 조회합니다.
+                    
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -35,7 +38,7 @@ public abstract class MemberDocsController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
-    public abstract ResponseEntity<MemberInfoResponse> getMyProfile();
+    public abstract ResponseEntity<MemberInfoResponse> getMyProfile(Long memberId);
 
     @Operation(
             summary = "사용자 정보 조회 - JWT O",

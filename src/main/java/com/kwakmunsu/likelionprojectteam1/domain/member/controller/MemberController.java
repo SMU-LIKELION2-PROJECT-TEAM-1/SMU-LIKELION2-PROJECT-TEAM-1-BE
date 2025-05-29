@@ -2,11 +2,12 @@ package com.kwakmunsu.likelionprojectteam1.domain.member.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.MemberCommendService;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.MemberQueryService;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.CommentRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.FavoritesRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.LikeRecipePreviewResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.MemberInfoResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.RecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.CommentRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.FavoritesRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.LikeRecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.MemberInfoResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,27 +29,17 @@ public class MemberController extends MemberDocsController {
     @Override
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> getMemberProfile(@PathVariable(name = "memberId") Long memberId) {
-        return ResponseEntity.ok(MemberInfoResponse.builder()
-                .profileUrl("profile-url")
-                .nickname("testNickname")
-                .email("test1234@gmai.com")
-                .grade("GOLD")
-                .point(888)
-                .build()
-        );
+        MemberInfoResponse response = memberQueryService.getProfile(memberId);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
     @GetMapping("/me")
-    public ResponseEntity<MemberInfoResponse> getMyProfile() {
-        return ResponseEntity.ok(MemberInfoResponse.builder()
-                .profileUrl("profile-url")
-                .nickname("testNickname")
-                .email("test1234@gmai.com")
-                .grade("GOLD")
-                .point(888)
-                .build()
-        );
+    public ResponseEntity<MemberInfoResponse> getMyProfile(@AuthMember Long memberId) {
+        MemberInfoResponse response = memberQueryService.getProfile(memberId);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
