@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto;
+package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
