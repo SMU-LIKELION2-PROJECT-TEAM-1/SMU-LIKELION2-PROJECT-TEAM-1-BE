@@ -1,9 +1,9 @@
 package com.kwakmunsu.likelionprojectteam1.domain.like.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.like.service.LikeCommandService;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +18,13 @@ public class LikeController extends LikeDocsController {
 
     @Override
     @PostMapping("{recipeId}/likes")
-    public ResponseEntity<Void> like(@PathVariable(name = "recipeId") Long recipeId) {
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<Void> like(
+            @AuthMember Long memberId,
+            @PathVariable(name = "recipeId") Long recipeId
+    ) {
+        likeCommandService.like(recipeId, memberId);
 
-    @Override
-    @DeleteMapping("{recipeId}/likes")
-    public ResponseEntity<Void> unLike(@PathVariable(name = "recipeId") Long recipeId) {
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

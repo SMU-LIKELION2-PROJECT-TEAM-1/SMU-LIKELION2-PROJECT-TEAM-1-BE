@@ -42,4 +42,8 @@ public class RecipeRepository {
         return recipeQueryDslRepository.findByMemberId(memberId, lastRecipeId, option);
     }
 
+    public boolean existsById(Long id) {
+        return recipeJpaRepository.existsById(id);
+    }
+
 }
