@@ -7,7 +7,6 @@ import com.kwakmunsu.likelionprojectteam1.domain.favorites.repository.FavoritesR
 import com.kwakmunsu.likelionprojectteam1.domain.image.ImageCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.like.repository.LikeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.repository.TagRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.view.repository.ViewRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,9 +23,6 @@ class RecipeDeleteServiceTest {
 
     @Mock
     private RecipeRepository recipeRepository;
-
-    @Mock
-    private TagRepository tagRepository;
 
     @Mock
     private ViewRepository viewRepository;
@@ -56,7 +52,6 @@ class RecipeDeleteServiceTest {
         verify(viewRepository).deleteByRecipeId(recipeId);
         verify(favoritesRepository).deleteByRecipeId(recipeId);
         verify(commentRepository).deleteByRecipeId(recipeId);
-        verify(tagRepository).deleteByRecipeId(recipeId);
         verify(imageCommandService).deleteByRecipeId(recipeId);
         verify(recipeRepository).deleteById(recipeId);
     }
