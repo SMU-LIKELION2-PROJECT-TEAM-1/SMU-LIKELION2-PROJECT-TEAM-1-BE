@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.tag.entity;
+package com.kwakmunsu.likelionprojectteam1.domain.recipe.entity;
 
 public enum Occasion {
 

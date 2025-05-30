@@ -17,8 +17,6 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeCreateServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeUpdateServiceRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.Tag;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.repository.TagRepository;
 import com.kwakmunsu.likelionprojectteam1.global.exception.BadRequestException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
@@ -47,9 +45,6 @@ class RecipeCommandServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private TagRepository tagRepository;
 
     @InjectMocks
     private RecipeCommandService recipeCommandService;
@@ -122,9 +117,7 @@ class RecipeCommandServiceTest {
         RecipeUpdateServiceRequest request = getRecipeUpdateServiceRequest(memberId);
         List<MultipartFile> list = new ArrayList<>();
         Recipe recipe = getRecipe();
-        Tag tag = mock(Tag.class);
         given(recipeRepository.findByIdAndMemberId(any(Long.class), any(Long.class))).willReturn(recipe);
-        given(tagRepository.findByRecipeId(any(Long.class))).willReturn(tag);
 
         // when
         recipeCommandService.update(request, 1L, list);

@@ -10,9 +10,6 @@ public record RecipeTagResponse(
         @Schema(description = "시간/상황", example = "아침")
         String occasion,
 
-        @Schema(description = "조리 시간", example = "10분")
-        String cookingTime,
-
         @Schema(description = "목적", example = "혼밥")
         String purpose,
 

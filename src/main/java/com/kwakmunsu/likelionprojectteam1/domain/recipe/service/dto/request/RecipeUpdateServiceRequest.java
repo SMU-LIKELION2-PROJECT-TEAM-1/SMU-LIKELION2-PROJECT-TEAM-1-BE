@@ -1,7 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.dto.RecipeUpdateDomainRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.tag.entity.dto.TagUpdateDomainRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.dto.TagUpdateDomainRequest;
 import java.util.List;
 import lombok.Builder;
 

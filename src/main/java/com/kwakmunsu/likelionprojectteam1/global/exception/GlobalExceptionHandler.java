@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
         int statusCode = BAD_REQUEST.value();
         String paramName = e.getParameterName();
         String paramType = e.getParameterType();
-        String message = paramType + "타입의" + " [" + paramName + " ] " + "파라미터가 누락되었습니다.";
+        String message = paramType + " 타입의" + " [ " + paramName + " ] " + "파라미터가 누락되었습니다.";
 
         ErrorResponse response = ErrorResponse.builder()
                 .statusCode(statusCode)

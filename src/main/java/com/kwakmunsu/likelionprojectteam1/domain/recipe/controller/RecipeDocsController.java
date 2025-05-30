@@ -5,7 +5,6 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeUpd
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
-import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -71,6 +70,7 @@ public abstract class RecipeDocsController {
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = RecipeDetailResponse.class)
                     )
+
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -125,6 +125,8 @@ public abstract class RecipeDocsController {
             )
     })
     public abstract ResponseEntity<RecipePaginationResponse> getRecipes(
+            Long memberId,
+
             @Parameter(
                     description = "게시글 유형 선택(DAILY, CHALLENGE)",
                     example = "DAILY"
@@ -135,13 +137,13 @@ public abstract class RecipeDocsController {
                     description = "시간/상황 (아침, 점심, 저녁, 야식, 간식 중 하나 선택)",
                     example = "아침"
             )
-            String timeSituation,
+            String occasion,
 
             @Parameter(
-                    description = "조리 시간 (5분, 10분, 15~20분, 30분, 1시간 중 하나 선택)",
-                    example = "10분"
+                    description = "조리 시간",
+                    example = "10"
             )
-            String cookingTime,
+            Integer cookingTime,
 
             @Parameter(
                     description = "목적 (다이어트 식단, 벌크업 식단, 건강식, 해장용, 혼밥용 중 하나 선택)",
@@ -157,13 +159,13 @@ public abstract class RecipeDocsController {
 
             @Parameter(
                     description = """
-                            정렬 기준 (기본값: createAt)<br>
-                            - createAt: 최신순<br>
-                            - oldest: 오래된순<br>
-                            - likes: 좋아요 많은 순<br>
-                            - favorites: 찜 많은 순
+                            정렬 기준 (기본값: ID_DESC)<br>
+                            - ID_DESC: 최신순<br>
+                            - ID_ASC: 오래된순<br>
+                            - LIKE_DESC: 좋아요 많은 순<br>
+                            - FAVORITES_DESC: 찜 많은 순
                             """,
-                    example = "likes"
+                    example = "ID_DESC"
             )
             String sortBy,
 
@@ -177,13 +179,7 @@ public abstract class RecipeDocsController {
                     description = "페이지 번호 (1부터 시작)",
                     example = "1"
             )
-            int page,
-
-            @Parameter(
-                    description = "한 페이지당 레시피 개수",
-                    example = "10"
-            )
-            int size
+            int page
     );
 
     @Operation(
@@ -272,8 +268,15 @@ public abstract class RecipeDocsController {
             Long memberId,
             Long recipeId,
             RecipeUpdateRequest request,
+            @Parameter(
+                    description = "수정할 이미지 파일 리스트 (여러 장 가능, 생략 가능)",
+                    content = @Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            )
             List<MultipartFile> images
-            );
+    );
 
     @Operation(
             summary = "레시피 글 삭제 요청",

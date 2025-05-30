@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.tag.entity.dto;
+package com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.dto;
 
 import lombok.Builder;
 

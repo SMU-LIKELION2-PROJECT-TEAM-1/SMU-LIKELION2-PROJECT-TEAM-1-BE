@@ -12,11 +12,19 @@ import static com.querydsl.core.types.Projections.constructor;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.MyPageOption;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.FoodType;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Occasion;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Purpose;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.dto.RecipePaginationDomainRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.SortOption;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeTagResponse;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,20 +35,65 @@ import org.springframework.stereotype.Repository;
 public class RecipeQueryDslRepository {
 
     private final JPAQueryFactory query;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 15;
 
     public RecipeInfinityPreviewResponse findByMemberId(
             Long memberId,
             Long lastRecipeId,
             MyPageOption option
     ) {
-        List<RecipePreviewResponse> responses = query.select(constructor(
+        List<RecipePreviewResponse> responses = getSelectFromEntityAndJoin()
+                .where(
+                        getOptionExpression(option, memberId),
+                        cursorIdCondition(lastRecipeId)
+                )
+                .orderBy(recipe.id.desc())
+                .groupBy(recipe.id)
+                .limit(PAGE_SIZE + 1)
+                .fetch();
+
+        boolean hasNext = responses.size() > PAGE_SIZE;
+        List<RecipePreviewResponse> limitedPage = getLimitedPage(responses, hasNext);
+        Long nextCursorOrNull = getNextCursorOrNull(responses, hasNext);
+
+        return RecipeInfinityPreviewResponse.builder()
+                .responses(limitedPage)
+                .nextCursorId(nextCursorOrNull)
+                .hasNext(hasNext)
+                .build();
+    }
+
+    public List<RecipePreviewResponse> findAllByPagination(RecipePaginationDomainRequest request) {
+        int offset = (request.page() - 1) * PAGE_SIZE;
+
+        return getSelectFromEntityAndJoin()
+                .where(
+                        occasionEq(request.occasion()),
+                        cookingTimeContain(request.cookingTime()),
+                        purposeEq(request.purpose()),
+                        foodTypeEq(request.foodType()),
+                        ingredientContains(request.ingredient())
+                )
+                .orderBy(getOrderSpecifier(request.sortBy()))
+                .groupBy(recipe.id)
+                .offset(offset)
+                .limit(PAGE_SIZE + 1)
+                .fetch();
+    }
+
+    private JPAQuery<RecipePreviewResponse> getSelectFromEntityAndJoin() {
+        return query.select(constructor(
                         RecipePreviewResponse.class,
                         recipe.id.as("recipeId"),
                         image.name.min(),
                         recipe.title,
                         recipe.introduction,
                         recipe.difficulty.stringValue(),
+                        constructor(RecipeTagResponse.class,
+                                recipe.tag.occasion.stringValue(),
+                                recipe.tag.purpose.stringValue(),
+                                recipe.tag.foodType.stringValue()
+                        ),
                         constructor(RecipeAuthorResponse.class,
                                 member.id.as("memberId"),
                                 member.nickname,
@@ -65,24 +118,7 @@ public class RecipeQueryDslRepository {
                 .leftJoin(view).on(recipe.id.eq(view.recipe.id))
                 .leftJoin(favorites).on(recipe.id.eq(favorites.recipe.id))
                 .leftJoin(comment).on(recipe.id.eq(comment.recipe.id))
-                .where(
-                        getOptionExpression(option, memberId),
-                        cursorIdCondition(lastRecipeId)
-                )
-                .orderBy(recipe.id.desc())
-                .groupBy(recipe.id)
-                .limit(PAGE_SIZE + 1)
-                .fetch();
-
-        boolean hasNext = responses.size() > PAGE_SIZE;
-        List<RecipePreviewResponse> limitedPage = getLimitedPage(responses, hasNext);
-        Long nextCursorOrNull = getNextCursorOrNull(responses, hasNext);
-
-        return RecipeInfinityPreviewResponse.builder()
-                .responses(limitedPage)
-                .nextCursorId(nextCursorOrNull)
-                .hasNext(hasNext)
-                .build();
+                ;
     }
 
     private Expression<Long> selectMinImageIdByRecipe() {
@@ -122,6 +158,63 @@ public class RecipeQueryDslRepository {
         }
 
         return null;
+    }
+
+    private BooleanExpression occasionEq(String occasion) {
+        if (occasion == null) {
+            return null;
+        }
+
+        return recipe.tag.occasion.eq(Occasion.valueOf(occasion));
+    }
+
+    private BooleanExpression cookingTimeContain(Integer cookingTime) {
+        if (cookingTime == null) {
+            return null;
+        }
+
+        return recipe.cookingTime.between(cookingTime - 5, cookingTime + 5);
+    }
+
+    private BooleanExpression purposeEq(String purpose) {
+        if (purpose == null) {
+            return null;
+        }
+
+        return recipe.tag.purpose.eq(Purpose.valueOf(purpose));
+    }
+
+    private BooleanExpression foodTypeEq(String foodType) {
+        if (foodType == null) {
+            return null;
+        }
+
+        return recipe.tag.foodType.eq(FoodType.valueOf(foodType));
+    }
+
+    private BooleanExpression ingredientContains(String ingredient) {
+        if (ingredient == null) {
+            return null;
+        }
+
+        return recipe.ingredients.contains(ingredient);
+    }
+
+    private OrderSpecifier<?> getOrderSpecifier(String option) {
+        SortOption sortOption;
+
+        if (option == null) {
+            sortOption = SortOption.ID_DESC;
+        } else {
+            sortOption = SortOption.valueOf(option);
+        }
+
+        return switch (sortOption) {
+            case ID_DESC -> recipe.id.desc();
+            case ID_ASC -> recipe.id.asc();
+            case LIKE_DESC -> like.id.countDistinct().desc();
+            case FAVORITES_DESC -> favorites.id.countDistinct().desc();
+        };
     }
 
 }

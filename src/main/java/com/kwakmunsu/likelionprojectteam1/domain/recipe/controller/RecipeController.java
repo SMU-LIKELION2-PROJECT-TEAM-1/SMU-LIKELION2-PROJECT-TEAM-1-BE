@@ -4,11 +4,12 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.Rec
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeCreateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeUpdateRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.RecipeCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.RecipeQueryService;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipePaginationServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
 import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
-import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecipeController extends RecipeDocsController {
 
     private final RecipeCommandService recipeCommandService;
+    private final RecipeQueryService recipeQueryService;
 
     // FIXME: image 가 스웨거에 안라감
     @Override
     @PostMapping
     public ResponseEntity<Void> create(
             @AuthMember Long memberId,
-            @Valid @RequestPart(value = "recipe") RecipeCreateRequest request,
+            @RequestPart(value = "recipe") RecipeCreateRequest request,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         Long recipeId = recipeCommandService.create(request.toServiceRequest(memberId), images);
@@ -49,17 +51,29 @@ public class RecipeController extends RecipeDocsController {
     @Override
     @GetMapping
     public ResponseEntity<RecipePaginationResponse> getRecipes(
-            @RequestParam(value = "boardType", required = false) String boardType,
-            @RequestParam(value = "timeSituation", required = false) String timeSituation,
-            @RequestParam(value = "cookingTime", required = false) String cookingTime,
+            @AuthMember Long memberId,
+            @RequestParam(value = "boardType") String boardType,
+            @RequestParam(value = "occasion", required = false) String occasion,
+            @RequestParam(value = "cookingTime", required = false) Integer cookingTime,
             @RequestParam(value = "purpose", required = false) String purpose,
             @RequestParam(value = "foodType", required = false) String foodType,
-            @RequestParam(value = "sortBy", defaultValue = "createAt", required = false) String sortBy,
+            @RequestParam(value = "sortBy", defaultValue = "ID_DESC", required = false) String sortBy,
             @RequestParam(value = "ingredient", required = false) String ingredient,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "1") int page
     ) {
-        return ResponseEntity.ok().build();
+        RecipePaginationServiceRequest request = getPaginationServiceRequest(
+                boardType,
+                occasion,
+                cookingTime,
+                purpose,
+                foodType,
+                sortBy,
+                ingredient,
+                page
+        );
+        RecipePaginationResponse response = recipeQueryService.getRecipes(memberId, request);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -95,7 +109,7 @@ public class RecipeController extends RecipeDocsController {
     public ResponseEntity<Void> update(
             @AuthMember Long memberId,
             @PathVariable Long recipeId,
-            @Valid @RequestPart(value = "recipe") RecipeUpdateRequest request,
+            @RequestPart(value = "recipe") RecipeUpdateRequest request,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         recipeCommandService.update(request.toServiceRequest(memberId), recipeId, images);
@@ -124,6 +138,28 @@ public class RecipeController extends RecipeDocsController {
         responses.add(testMock);
         responses.add(testMock);
         return responses;
+    }
+
+    private RecipePaginationServiceRequest getPaginationServiceRequest(
+            String boardType,
+            String occasion,
+            Integer cookingTime,
+            String purpose,
+            String foodType,
+            String sortBy,
+            String ingredient,
+            int page
+    ) {
+        return RecipePaginationServiceRequest.builder()
+                .boardType(boardType)
+                .occasion(occasion)
+                .cookingTime(cookingTime)
+                .purpose(purpose)
+                .foodType(foodType)
+                .sortBy(sortBy)
+                .ingredient(ingredient)
+                .page(page)
+                .build();
     }
 
 }
