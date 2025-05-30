@@ -15,7 +15,7 @@ public record CommentResponse(
         @Schema(description = "작성자 닉네임", example = "testNickname")
         String nickname,
 
-        @Schema(description = "작성자 등급", example = "GOLD")
+        @Schema(description = "작성자 등급", example = "FLAME_CHEF")
         String grade,
 
         @Schema(description = "댓글", example = "testComment")

@@ -7,13 +7,13 @@ import lombok.Builder;
 @Builder
 public record RecipeTagResponse(
 
-        @Schema(description = "시간/상황", example = "아침")
+        @Schema(description = "시간/상황", example = "LUNCH")
         String occasion,
 
-        @Schema(description = "목적", example = "혼밥")
+        @Schema(description = "목적", example = "SOLO_MEAL")
         String purpose,
 
-        @Schema(description = "음식 유형", example = "한식")
+        @Schema(description = "음식 유형", example = "KOREAN")
         String foodType
 ) {
 
