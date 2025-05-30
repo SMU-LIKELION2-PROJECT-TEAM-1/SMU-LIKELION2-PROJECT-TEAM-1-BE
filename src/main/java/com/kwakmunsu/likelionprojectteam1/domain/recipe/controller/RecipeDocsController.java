@@ -134,8 +134,8 @@ public abstract class RecipeDocsController {
             String boardType,
 
             @Parameter(
-                    description = "시간/상황 (아침, 점심, 저녁, 야식, 간식 중 하나 선택)",
-                    example = "아침"
+                    description = "시간/상황(BREAKFAST, LUNCH, DINNER, LATE_NIGHT, SNACK)",
+                    example = "LUNCH"
             )
             String occasion,
 
@@ -146,14 +146,14 @@ public abstract class RecipeDocsController {
             Integer cookingTime,
 
             @Parameter(
-                    description = "목적 (다이어트 식단, 벌크업 식단, 건강식, 해장용, 혼밥용 중 하나 선택)",
-                    example = "다이어트 식단"
+                    description = "목적 (DIET, BULK_UP, HEALTHY, HANGOVER, SOLO_MEAL)",
+                    example = "DIET"
             )
             String purpose,
 
             @Parameter(
-                    description = "음식 유형 (한식, 양식, 일식, 중식 중 하나 선택)",
-                    example = "한식"
+                    description = "음식 유형 (KOREAN, WESTERN, JAPANESE, CHINESE)",
+                    example = "KOREAN"
             )
             String foodType,
 

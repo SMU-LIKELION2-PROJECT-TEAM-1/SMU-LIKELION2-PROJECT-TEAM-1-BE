@@ -79,7 +79,7 @@ public class RecipeController extends RecipeDocsController {
     @Override
     @GetMapping("/{recipeId}")
     public ResponseEntity<RecipeDetailResponse> getRecipe(@PathVariable Long recipeId) {
-        return ResponseEntity.ok(RecipeDetailResponse.builder().build());
+        return ResponseEntity.ok(RecipeDetailResponse.mock());
     }
 
     @Override
