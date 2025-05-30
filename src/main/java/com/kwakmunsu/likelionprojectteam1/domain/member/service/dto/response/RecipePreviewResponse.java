@@ -2,6 +2,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeTagResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -22,6 +23,8 @@ public record RecipePreviewResponse(
 
         @Schema(description = "레시피 난이도", example = "HIGH")
         String difficulty,
+
+        RecipeTagResponse tagResponse,
 
         RecipeAuthorResponse authorResponse,
 
