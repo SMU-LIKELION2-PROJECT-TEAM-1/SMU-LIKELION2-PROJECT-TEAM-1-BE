@@ -2,10 +2,14 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.repository;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.MyPageOption;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.dto.RecipePaginationDomainRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +48,14 @@ public class RecipeRepository {
 
     public boolean existsById(Long id) {
         return recipeJpaRepository.existsById(id);
+    }
+
+    public RecipePaginationResponse findAllByPagination(RecipePaginationDomainRequest request) {
+        List<RecipePreviewResponse> previewResponses = recipeQueryDslRepository.findAllByPagination(request);
+
+        return RecipePaginationResponse.builder()
+                .responses(previewResponses)
+                .build();
     }
 
 }
