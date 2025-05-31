@@ -16,7 +16,7 @@ public record CommentCreateRequest(
         @NotBlank(message = "내용을 입력해주세요.")
         String content,
 
-        @Schema(description = "부모 댓글 id", example = "1", requiredMode = NOT_REQUIRED)
+        @Schema(description = "부모 댓글 id - 대댓글 작성 시 포함시킵니다.", example = "1", requiredMode = NOT_REQUIRED)
         Long parentCommentId
 ) {
 

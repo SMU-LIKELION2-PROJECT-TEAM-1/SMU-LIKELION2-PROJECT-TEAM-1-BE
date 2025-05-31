@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Member Controller", description = "Member API")
@@ -20,7 +21,6 @@ public abstract class MemberDocsController {
             summary = "내 정보 조회 - JWT O",
             description = """
                     내 정보(프로필 사진, 이메일, 닉네임, 등급, 등급 점수)를 조회합니다.
-                                        
                     """
     )
     @ApiResponses(value = {
@@ -28,13 +28,16 @@ public abstract class MemberDocsController {
                     responseCode = "200",
                     description = "내 정보 조회 성공",
                     content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MemberInfoResponse.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패(JWT 필요)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public abstract ResponseEntity<MemberInfoResponse> getMyProfile(Long memberId);
@@ -48,13 +51,16 @@ public abstract class MemberDocsController {
                     responseCode = "200",
                     description = "사용자 정보 조회 성공",
                     content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MemberInfoResponse.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패(JWT 필요)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public abstract ResponseEntity<MemberInfoResponse> getMemberProfile(
@@ -65,8 +71,11 @@ public abstract class MemberDocsController {
     @Operation(
             summary = "마이페이지에서 좋아요, 찜, 댓글 레시피 목록 조회 - JWT O",
             description = """
-                    요청한 옵션의 레시피 목록들이 조회된다.LIKE, FAVORITES, COMMENT<br>
-                    - 커서 기반으로 동작한다.
+                    요청한 옵션의 레시피 목록들이 조회된다. LIKE, FAVORITES, COMMENT<br>
+                    - 커서 기반으로 동작합니다.
+                    - 예시
+                        - 맨 처음 조회할 경우: http://localhost:8080?option=LIKE
+                        - 스크롤 경우: http://localhost:8080?lastRecipeId=13&option=COMMENT
                     """
     )
     @ApiResponses(value = {
@@ -74,19 +83,23 @@ public abstract class MemberDocsController {
                     responseCode = "200",
                     description = "내가 선택한 옵션 레시피 목록 조회 성공, 내가 선택한 옵션의 레시피가 없을 경우 빈 리스트 반환",
                     content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = RecipeInfinityPreviewResponse.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패(JWT 필요)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
             )
     })
     public abstract ResponseEntity<RecipeInfinityPreviewResponse> getMyRecipes(
             Long memberId,
             Long lastRecipeId,
-            @Schema(description =  "마이 페이지 에서 목록 확인 옵션",example = "LIKE || FAVORITES || COMMENT")
+            @Schema(description = "마이페이지 에서 목록 확인 옵션", example = "LIKE || FAVORITES || COMMENT")
             MyPageOption option
     );
 
@@ -102,7 +115,9 @@ public abstract class MemberDocsController {
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패(JWT 필요)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public abstract ResponseEntity<Void> logout();

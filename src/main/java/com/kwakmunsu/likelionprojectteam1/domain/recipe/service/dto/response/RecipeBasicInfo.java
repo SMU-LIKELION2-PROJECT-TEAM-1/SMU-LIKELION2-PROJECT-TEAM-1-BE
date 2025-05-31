@@ -3,6 +3,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+@Schema(description = "레시피 기본 정보 응답 DTO")
 @Builder
 public record RecipeBasicInfo(
 
