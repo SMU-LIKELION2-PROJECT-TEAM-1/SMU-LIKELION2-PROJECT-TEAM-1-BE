@@ -2,7 +2,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.repository;
 
 import static com.kwakmunsu.likelionprojectteam1.domain.comment.entity.QComment.comment;
 import static com.kwakmunsu.likelionprojectteam1.domain.favorites.entity.QFavorites.favorites;
-import static com.kwakmunsu.likelionprojectteam1.domain.image.QImage.image;
+import static com.kwakmunsu.likelionprojectteam1.domain.image.entity.QImage.image;
 import static com.kwakmunsu.likelionprojectteam1.domain.like.entity.QLike.like;
 import static com.kwakmunsu.likelionprojectteam1.domain.member.entity.QMember.member;
 import static com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.QRecipe.recipe;
@@ -10,6 +10,7 @@ import static com.kwakmunsu.likelionprojectteam1.domain.view.entity.QView.view;
 import static com.querydsl.core.types.Projections.constructor;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.MyPageOption;
+import com.kwakmunsu.likelionprojectteam1.domain.member.entity.QMember;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.FoodType;
@@ -17,12 +18,18 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Occasion;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Purpose;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.dto.RecipePaginationDomainRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.SortOption;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.CommentResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeAuthorResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeBasicInfo;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeTagResponse;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -79,6 +86,85 @@ public class RecipeQueryDslRepository {
                 .offset(offset)
                 .limit(PAGE_SIZE + 1)
                 .fetch();
+    }
+
+    public RecipeDetailResponse findById(Long recipeId) {
+        QMember commentAuthor = new QMember("commentAuthor");
+
+        StringTemplate formattedCreatedAt = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})",
+                recipe.createdAt,
+                ConstantImpl.create("%y.%m.%d")
+        );
+
+        StringTemplate formattedCommentCreatedAt = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})",
+                comment.createdAt,
+                ConstantImpl.create("%y.%m.%d")
+        );
+
+        RecipeBasicInfo basicInfo = query
+                .select(constructor(RecipeBasicInfo.class,
+                        recipe.title,
+                        recipe.introduction,
+                        recipe.difficulty.stringValue(),
+                        recipe.ingredients,
+                        recipe.content,
+                        formattedCreatedAt,
+                        constructor(RecipeTagResponse.class,
+                                recipe.tag.occasion.stringValue(),
+                                recipe.tag.purpose.stringValue(),
+                                recipe.tag.foodType.stringValue()
+                        ),
+                        constructor(RecipeAuthorResponse.class,
+                                member.id,
+                                member.nickname,
+                                member.grade.stringValue()
+                        )
+                ))
+                .from(recipe)
+                .join(recipe.member, member)
+                .where(recipe.id.eq(recipeId))
+                .fetchOne();
+
+        // 3. 이미지 목록 (1:N 관계)
+        List<String> images = query
+                .select(image.name)
+                .from(image)
+                .where(image.recipe.id.eq(recipeId))
+                .fetch();
+
+        RecipeCountResponse countResponse = query
+                .select(constructor(RecipeCountResponse.class,
+                        like.countDistinct(),
+                        view.countDistinct(),
+                        comment.countDistinct(),
+                        favorites.countDistinct()
+                ))
+                .from(recipe)
+                .leftJoin(like).on(recipe.id.eq(like.recipe.id))
+                .leftJoin(view).on(recipe.id.eq(view.recipe.id))
+                .leftJoin(comment).on(recipe.id.eq(comment.recipe.id))
+                .leftJoin(favorites).on(recipe.id.eq(favorites.recipe.id))
+                .where(recipe.id.eq(recipeId))
+                .fetchOne();
+
+        // 4. 댓글 목록 (1:N 관계)
+        List<CommentResponse> commentResponses = query
+                .select(constructor(CommentResponse.class,
+                        comment.id,
+                        commentAuthor.id,
+                        commentAuthor.nickname,
+                        comment.content,
+                        commentAuthor.grade.stringValue(),
+                        formattedCommentCreatedAt
+                ))
+                .from(comment)
+                .join(comment.member, commentAuthor)
+                .where(comment.recipe.id.eq(recipeId))
+                .fetch();
+
+        return RecipeDetailResponse.from(images, basicInfo, countResponse, commentResponses);
     }
 
     private JPAQuery<RecipePreviewResponse> getSelectFromEntityAndJoin() {

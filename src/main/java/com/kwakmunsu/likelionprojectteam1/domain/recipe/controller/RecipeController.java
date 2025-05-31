@@ -79,7 +79,9 @@ public class RecipeController extends RecipeDocsController {
     @Override
     @GetMapping("/{recipeId}")
     public ResponseEntity<RecipeDetailResponse> getRecipe(@PathVariable Long recipeId) {
-        return ResponseEntity.ok(RecipeDetailResponse.mock());
+        RecipeDetailResponse response = recipeQueryService.getRecipe(recipeId);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
