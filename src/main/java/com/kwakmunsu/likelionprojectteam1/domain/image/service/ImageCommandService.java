@@ -1,5 +1,7 @@
-package com.kwakmunsu.likelionprojectteam1.domain.image;
+package com.kwakmunsu.likelionprojectteam1.domain.image.service;
 
+import com.kwakmunsu.likelionprojectteam1.domain.image.entity.Image;
+import com.kwakmunsu.likelionprojectteam1.domain.image.repository.ImageRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.infrastructure.s3.service.S3Provider;
 import java.util.List;

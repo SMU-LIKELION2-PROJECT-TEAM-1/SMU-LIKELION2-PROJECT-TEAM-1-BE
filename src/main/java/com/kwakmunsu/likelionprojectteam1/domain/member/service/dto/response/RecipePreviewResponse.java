@@ -39,7 +39,7 @@ public record RecipePreviewResponse(
                 .difficulty("상")
                 .authorResponse(RecipeAuthorResponse.builder()
                         .nickname("testNickname")
-                        .authorId(12345L)
+                        .id(12345L)
                         .grade("GOLD")
                         .build())
                 .countResponse(RecipeCountResponse.builder()
@@ -51,4 +51,5 @@ public record RecipePreviewResponse(
                 )
                 .build();
     }
+
 }

@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.kwakmunsu.likelionprojectteam1.domain.image.ImageCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.image.service.ImageCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;

@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.image;
+package com.kwakmunsu.likelionprojectteam1.domain.image.entity;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.global.entity.BaseTimeEntity;

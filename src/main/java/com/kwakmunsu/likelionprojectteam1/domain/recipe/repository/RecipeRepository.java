@@ -5,6 +5,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.Rec
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.dto.RecipePaginationDomainRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
@@ -56,6 +57,11 @@ public class RecipeRepository {
         return RecipePaginationResponse.builder()
                 .responses(previewResponses)
                 .build();
+    }
+
+    // TODO: 네이밍 고민
+    public RecipeDetailResponse getRecipe(Long recipeId ) {
+       return recipeQueryDslRepository.findById(recipeId);
     }
 
 }
