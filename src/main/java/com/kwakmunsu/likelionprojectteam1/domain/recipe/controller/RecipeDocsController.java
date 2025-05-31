@@ -43,6 +43,14 @@ public abstract class RecipeDocsController {
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증되지 않은 사용자입니다.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
             )
     })
     public abstract ResponseEntity<Void> create(
@@ -101,8 +109,9 @@ public abstract class RecipeDocsController {
                     - 정렬 기준과 페이징 처리도 지원합니다.
                     - 메인페이지 미리보기 9개는 page=1, size= 9로 요청하시면 됩니다.
                     <ul>
-                        <li><b>정렬 기준(sortBy):</b> createAt(최신순, 기본값), oldest(오래된순), likes(좋아요순), favorites(찜순)</li>
+                        <li><b>정렬 기준(sortBy):</b> ID_DESC(최신순, 기본값), ID_ASC(오래된순), LIKE_DESC(좋아요순), FAVORITES_DESC(찜순)</li>
                         <li><b>태그별 필터:</b> 각 파라미터는 선택적으로 입력할 수 있습니다.</li>
+                        <li><b>예시:</b> http://localhost:8080/recipes?boardType=DAILY&occasion=LUNCH&sortBy=ID_ASC.</li>
                     </ul>
                     """
     )
@@ -130,32 +139,27 @@ public abstract class RecipeDocsController {
             @Parameter(
                     description = "게시글 유형 선택(DAILY, CHALLENGE)",
                     example = "DAILY"
-            )
-            String boardType,
+            ) String boardType,
 
             @Parameter(
                     description = "시간/상황(BREAKFAST, LUNCH, DINNER, LATE_NIGHT, SNACK)",
                     example = "LUNCH"
-            )
-            String occasion,
+            ) String occasion,
 
             @Parameter(
                     description = "조리 시간",
                     example = "10"
-            )
-            Integer cookingTime,
+            ) Integer cookingTime,
 
             @Parameter(
                     description = "목적 (DIET, BULK_UP, HEALTHY, HANGOVER, SOLO_MEAL)",
                     example = "DIET"
-            )
-            String purpose,
+            ) String purpose,
 
             @Parameter(
                     description = "음식 유형 (KOREAN, WESTERN, JAPANESE, CHINESE)",
                     example = "KOREAN"
-            )
-            String foodType,
+            ) String foodType,
 
             @Parameter(
                     description = """
@@ -166,20 +170,17 @@ public abstract class RecipeDocsController {
                             - FAVORITES_DESC: 찜 많은 순
                             """,
                     example = "ID_DESC"
-            )
-            String sortBy,
+            ) String sortBy,
 
             @Parameter(
                     description = "재료 검색",
                     example = "달걀"
-            )
-            String ingredient,
+            ) String ingredient,
 
             @Parameter(
                     description = "페이지 번호 (1부터 시작)",
                     example = "1"
-            )
-            int page
+            ) int page
     );
 
     @Operation(
@@ -238,7 +239,7 @@ public abstract class RecipeDocsController {
     @Operation(
             summary = "레시피 글 수정 요청",
             description = """
-                    작성자만이 레시피를 수정 할 수 있습니다. 수정된 값만 보내는 것이 아니라 전체를 다 보낸다.<br>
+                    작성자만이 레시피를 수정 할 수 있습니다. !! 수정된 값만 보내는 것이 아니라 전체를 다 보낸다.<br>
                     - 파일은 multipart/form-data 형식입니다. 현재 오류로 인해 swagger 에서 표시 안됨
                     """
     )
@@ -308,7 +309,7 @@ public abstract class RecipeDocsController {
 
     @Operation(
             summary = "챌린지 레시피 재료 투표 요청",
-            description = "다음 주차 챌린지 레시피 재료 투표를 합니다. 중복 투표는 불가하며 기간은 일주일 입니다."
+            description = "다음주차 챌린지 레시피 재료 투표를 합니다. 중복 투표는 불가하며 기간은 일주일 입니다."
     )
     @ApiResponses(value = {
             @ApiResponse(

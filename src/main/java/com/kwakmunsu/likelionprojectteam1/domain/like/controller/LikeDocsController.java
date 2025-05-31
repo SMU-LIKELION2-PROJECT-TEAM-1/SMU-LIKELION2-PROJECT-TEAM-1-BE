@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Like Controller", description = "Like API")
@@ -22,12 +23,16 @@ public abstract class LikeDocsController {
             @ApiResponse(
                     responseCode = "404",
                     description = "존재하지 않은 레시피입니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)
                     )),
             @ApiResponse(
                     responseCode = "401",
                     description = "인증되지 않은 사용자입니다..",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)
                     )),
     })
     public abstract ResponseEntity<Void> like(

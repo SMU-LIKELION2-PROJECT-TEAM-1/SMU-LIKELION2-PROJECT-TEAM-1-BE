@@ -44,7 +44,7 @@ public class MemberController extends MemberDocsController {
     public ResponseEntity<RecipeInfinityPreviewResponse> getMyRecipes(
             @AuthMember Long memberId,
             @RequestParam(value = "lastRecipeId", required = false) Long lastRecipeId,
-            @RequestParam("option") MyPageOption option
+            @RequestParam(value = "option") MyPageOption option
     ) {
         RecipeInfinityPreviewResponse response = memberQueryService.getMyRecipes(memberId, lastRecipeId, option);
 
