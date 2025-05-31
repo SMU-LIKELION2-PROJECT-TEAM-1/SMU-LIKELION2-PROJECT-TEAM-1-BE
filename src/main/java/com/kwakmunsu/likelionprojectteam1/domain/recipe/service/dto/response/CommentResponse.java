@@ -21,7 +21,7 @@ public record CommentResponse(
         @Schema(description = "댓글", example = "testComment")
         String content,
 
-        @Schema(description = "댓글 생성 날짜", example = "2025.01.24")
+        @Schema(description = "댓글 생성 날짜", example = "25.01.24")
         String createdAt
 ) {
 
