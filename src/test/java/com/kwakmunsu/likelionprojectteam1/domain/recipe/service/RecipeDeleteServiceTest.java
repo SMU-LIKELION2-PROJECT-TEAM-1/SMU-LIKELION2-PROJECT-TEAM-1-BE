@@ -4,7 +4,7 @@ import static org.mockito.Mockito.verify;
 
 import com.kwakmunsu.likelionprojectteam1.domain.comment.repository.CommentRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.favorites.repository.FavoritesRepository;
-import com.kwakmunsu.likelionprojectteam1.domain.image.ImageCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.image.service.ImageCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.like.repository.LikeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.view.repository.ViewRepository;

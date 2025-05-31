@@ -1,6 +1,6 @@
 package com.kwakmunsu.likelionprojectteam1.domain.recipe.service;
 
-import com.kwakmunsu.likelionprojectteam1.domain.image.ImageCommandService;
+import com.kwakmunsu.likelionprojectteam1.domain.image.service.ImageCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;

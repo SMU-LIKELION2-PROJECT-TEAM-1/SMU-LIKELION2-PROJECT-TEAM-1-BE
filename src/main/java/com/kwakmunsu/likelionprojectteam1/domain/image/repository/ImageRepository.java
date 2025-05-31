@@ -1,5 +1,6 @@
-package com.kwakmunsu.likelionprojectteam1.domain.image;
+package com.kwakmunsu.likelionprojectteam1.domain.image.repository;
 
+import com.kwakmunsu.likelionprojectteam1.domain.image.entity.Image;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
