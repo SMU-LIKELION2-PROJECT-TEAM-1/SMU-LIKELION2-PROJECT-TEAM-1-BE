@@ -25,6 +25,9 @@ public class CommentRepository {
         commentJpaRepository.deleteByRecipeId(recipeId);
     }
 
+    public void deleteByParentCommentId(Long parentCommentId) {
+        commentJpaRepository.deleteByParentCommentId(parentCommentId);
+    }
     public boolean existsByIdAndMemberId(Long id, Long memberId) {
         return commentJpaRepository.existsByIdAndMemberId(id, memberId);
     }
