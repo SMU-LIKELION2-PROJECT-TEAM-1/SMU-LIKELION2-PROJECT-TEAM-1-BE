@@ -7,4 +7,6 @@ public interface ViewJpaRepository extends JpaRepository<View, Long> {
 
     void deleteByRecipeId(Long recipeId);
 
+    boolean existsByMemberIdAndRecipeId(Long memberId, Long recipeId);
+
 }
