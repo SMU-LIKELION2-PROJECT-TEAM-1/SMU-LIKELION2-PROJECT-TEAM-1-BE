@@ -8,7 +8,7 @@ import lombok.Builder;
 public record RecipeAuthorResponse(
 
         @Schema(description = "작성자 id", example = "123")
-        long authorId,
+        long id,
 
         @Schema(description = "작성자 닉네임", example = "testNickname")
         String nickname,
