@@ -7,9 +7,11 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.dto.RecipePaginationDomainRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -69,6 +71,14 @@ public class RecipeRepository {
 
         return RecipePaginationResponse.builder()
                 .responses(previewResponses)
+                .build();
+    }
+
+    public WeeklyTop3RecipesResponse findTop3RecipesByLastWeekLikes(LocalDateTime lastWeekStart, LocalDateTime lastWeekEnd) {
+        List<RecipePreviewResponse> responses = recipeQueryDslRepository.findTop3RecipesByLastWeekLikes(lastWeekStart, lastWeekEnd);
+
+        return WeeklyTop3RecipesResponse.builder()
+                .responses(responses)
                 .build();
     }
 

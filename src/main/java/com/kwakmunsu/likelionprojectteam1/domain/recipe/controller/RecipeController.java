@@ -98,12 +98,11 @@ public class RecipeController extends RecipeDocsController {
     }
 
     @Override
-    @PostMapping("/weekly")
+    @GetMapping("/weekly")
     public ResponseEntity<WeeklyTop3RecipesResponse> weekly() {
-        return ResponseEntity.ok(WeeklyTop3RecipesResponse.builder()
-                .responses(getTestRecipePreviewResponse())
-                .build()
-        );
+        WeeklyTop3RecipesResponse response = recipeQueryService.getLastWeekTop3Recipes();
+
+        return ResponseEntity.ok(response);
     }
 
     @Override

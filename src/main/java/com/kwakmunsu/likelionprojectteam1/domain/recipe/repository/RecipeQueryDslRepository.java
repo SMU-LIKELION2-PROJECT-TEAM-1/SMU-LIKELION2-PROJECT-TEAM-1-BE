@@ -24,7 +24,6 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.Rec
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeBasicInfo;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeTagResponse;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Expression;
@@ -35,10 +34,10 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value.Str;
 
 @RequiredArgsConstructor
 @Repository
@@ -187,6 +186,18 @@ public class RecipeQueryDslRepository {
                 .fetch();
     }
 
+    public List<RecipePreviewResponse> findTop3RecipesByLastWeekLikes(LocalDateTime lastWeekStart, LocalDateTime lastWeekEnd) {
+        return getSelectFromEntityAndJoin()
+                .where(like.createdAt.between(lastWeekStart, lastWeekEnd))
+                .groupBy(recipe.id)
+                .orderBy(
+                        like.countDistinct().desc(),
+                        recipe.id.asc()
+                )
+                .limit(3)
+                .fetch();
+    }
+
     private JPAQuery<RecipePreviewResponse> getSelectFromEntityAndJoin() {
         return query.select(constructor(
                         RecipePreviewResponse.class,
@@ -273,6 +284,7 @@ public class RecipeQueryDslRepository {
 
         return recipe.boardType.eq(BoardType.valueOf(boardType));
     }
+
     private BooleanExpression occasionEq(String occasion) {
         if (occasion == null) {
             return null;
