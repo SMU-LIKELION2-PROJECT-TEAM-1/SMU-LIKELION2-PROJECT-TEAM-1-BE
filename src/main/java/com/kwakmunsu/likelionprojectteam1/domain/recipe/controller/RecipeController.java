@@ -123,7 +123,7 @@ public class RecipeController extends RecipeDocsController {
             @AuthMember Long memberId,
             @PathVariable Long recipeId
     ) {
-        recipeCommandService.delete(memberId, recipeId);
+        recipeCommandService.delete(recipeId, memberId);
         return ResponseEntity.noContent().build();
     }
 
