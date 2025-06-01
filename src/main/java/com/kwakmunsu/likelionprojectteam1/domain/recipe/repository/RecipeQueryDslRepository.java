@@ -13,6 +13,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.entity.MyPageOption;
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.QMember;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipePreviewResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.FoodType;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Occasion;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Purpose;
@@ -77,6 +78,7 @@ public class RecipeQueryDslRepository {
 
         return getSelectFromEntityAndJoin()
                 .where(
+                        boardTypeEq(request.boardType()),
                         occasionEq(request.occasion()),
                         cookingTimeContain(request.cookingTime()),
                         purposeEq(request.purpose()),
@@ -264,6 +266,13 @@ public class RecipeQueryDslRepository {
         return null;
     }
 
+    private BooleanExpression boardTypeEq(String boardType) {
+        if (boardType == null) {
+            return null;
+        }
+
+        return recipe.boardType.eq(BoardType.valueOf(boardType));
+    }
     private BooleanExpression occasionEq(String occasion) {
         if (occasion == null) {
             return null;
