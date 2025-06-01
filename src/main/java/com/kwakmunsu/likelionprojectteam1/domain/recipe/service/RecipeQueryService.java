@@ -2,6 +2,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.recipe.service;
 
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipePaginationServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeSearchServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class RecipeQueryService {
 
     public RecipeDetailResponse getRecipe(Long recipeId) {
         return recipeRepository.getRecipe(recipeId);
+    }
+
+    public RecipePaginationResponse search(RecipeSearchServiceRequest request) {
+        return recipeRepository.search(request.query(), request.page());
     }
 
 }

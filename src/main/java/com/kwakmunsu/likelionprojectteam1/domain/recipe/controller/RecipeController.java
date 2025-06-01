@@ -6,6 +6,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.controller.dto.RecipeUpd
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.RecipeCommandService;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.RecipeQueryService;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipePaginationServiceRequest;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeSearchServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.WeeklyTop3RecipesResponse;
@@ -85,16 +86,15 @@ public class RecipeController extends RecipeDocsController {
     }
 
     @Override
-    @PostMapping("/search")
+    @GetMapping("/search")
     public ResponseEntity<RecipePaginationResponse> search(
             @RequestParam(value = "query") String query,
-            @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int size
+            @RequestParam(defaultValue = "1", required = false) int page
     ) {
-        return ResponseEntity.ok(RecipePaginationResponse.builder()
-                .responses(getTestRecipePreviewResponse())
-                .build()
-        );
+        RecipeSearchServiceRequest request = new RecipeSearchServiceRequest(query, page);
+        RecipePaginationResponse response = recipeQueryService.search(request);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
