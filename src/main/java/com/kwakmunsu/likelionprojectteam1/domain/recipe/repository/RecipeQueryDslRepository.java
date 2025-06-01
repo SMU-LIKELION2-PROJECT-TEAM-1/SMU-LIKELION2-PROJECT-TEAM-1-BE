@@ -23,6 +23,7 @@ import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.Rec
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeBasicInfo;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeCountResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeDetailResponse;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipePaginationResponse;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.response.RecipeTagResponse;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Expression;
@@ -36,6 +37,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value.Str;
 
 @RequiredArgsConstructor
 @Repository
@@ -71,7 +73,7 @@ public class RecipeQueryDslRepository {
     }
 
     public List<RecipePreviewResponse> findAllByPagination(RecipePaginationDomainRequest request) {
-        int offset = (request.page() - 1) * PAGE_SIZE;
+        int offset = getOffset(request.page());
 
         return getSelectFromEntityAndJoin()
                 .where(
@@ -166,6 +168,21 @@ public class RecipeQueryDslRepository {
                 .fetch();
 
         return RecipeDetailResponse.from(images, basicInfo, countResponse, commentResponses);
+    }
+
+    public List<RecipePreviewResponse> findByTitle(String query, int page) {
+        int offset = getOffset(page);
+
+        return getSelectFromEntityAndJoin()
+                .where(
+                        recipe.title.contains(query)
+                                .or(recipe.content.contains(query))
+                )
+                .orderBy(recipe.id.desc())
+                .groupBy(recipe.id)
+                .offset(offset)
+                .limit(PAGE_SIZE + 1)
+                .fetch();
     }
 
     private JPAQuery<RecipePreviewResponse> getSelectFromEntityAndJoin() {
@@ -304,4 +321,8 @@ public class RecipeQueryDslRepository {
         };
     }
 
+
+    private int getOffset(int page) {
+        return (page - 1) * PAGE_SIZE;
+    }
 }

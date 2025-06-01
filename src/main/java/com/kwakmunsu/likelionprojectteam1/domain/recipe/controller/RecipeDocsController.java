@@ -209,8 +209,7 @@ public abstract class RecipeDocsController {
     })
     public abstract ResponseEntity<RecipePaginationResponse> search(
             @Parameter(description = "검색 키워드를 입력한다. 제목을 기반으로 검색한다.", example = "자취 음식") String query,
-            @Parameter(description = "페이지 번호 (1부터 시작)", example = "1") int page,
-            @Parameter(description = "한 페이지당 레시피 개수", example = "10") int size
+            @Parameter(description = "페이지 번호 (1부터 시작)", example = "1") int page
     );
 
     @Operation(

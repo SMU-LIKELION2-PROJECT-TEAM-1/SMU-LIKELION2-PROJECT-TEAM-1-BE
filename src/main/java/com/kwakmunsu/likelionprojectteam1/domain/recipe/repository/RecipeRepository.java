@@ -60,8 +60,16 @@ public class RecipeRepository {
     }
 
     // TODO: 네이밍 고민
-    public RecipeDetailResponse getRecipe(Long recipeId ) {
-       return recipeQueryDslRepository.findById(recipeId);
+    public RecipeDetailResponse getRecipe(Long recipeId) {
+        return recipeQueryDslRepository.findById(recipeId);
+    }
+
+    public RecipePaginationResponse search(String query, int page) {
+        List<RecipePreviewResponse> previewResponses = recipeQueryDslRepository.findByTitle(query, page);
+
+        return RecipePaginationResponse.builder()
+                .responses(previewResponses)
+                .build();
     }
 
 }
