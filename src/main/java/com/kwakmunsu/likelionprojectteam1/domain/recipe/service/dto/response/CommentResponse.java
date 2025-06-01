@@ -9,6 +9,9 @@ public record CommentResponse(
         @Schema(description = "댓글 id", example = "1")
         Long id,
 
+        @Schema(description = "부모 댓글 id - null 일 경우 부모 댓글", example = "1 or null")
+        Long parentCommentId,
+
         @Schema(description = "작성자 id", example = "1")
         Long authorId,
 
@@ -23,6 +26,7 @@ public record CommentResponse(
 
         @Schema(description = "댓글 생성 날짜", example = "25.01.24")
         String createdAt
+
 ) {
 
 }
