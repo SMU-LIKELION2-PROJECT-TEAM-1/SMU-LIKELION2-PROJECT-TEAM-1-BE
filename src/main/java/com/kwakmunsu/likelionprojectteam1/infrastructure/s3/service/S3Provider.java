@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -47,7 +48,7 @@ public class S3Provider {
         String fileName = createFileName(file);
         uploadImageToS3(file, fileName, s3Client);
 
-        return fileName;
+        return getFileUrl(fileName);
     }
 
     public void deleteImages(List<String> files) {
@@ -89,6 +90,14 @@ public class S3Provider {
     // 이미지 파일 이름 중복 예방으로 UUID 사용.
     private String createFileName(MultipartFile file) {
         return dir + UUID.randomUUID() + "-" + file.getOriginalFilename();
+    }
+
+    private String getFileUrl(String filename) {
+        GetUrlRequest getUrlRequest = GetUrlRequest.builder().bucket(bucket).key(filename).build();
+
+        return String.valueOf(s3Client.utilities()
+                .getUrl(getUrlRequest)
+        );
     }
 
 }
