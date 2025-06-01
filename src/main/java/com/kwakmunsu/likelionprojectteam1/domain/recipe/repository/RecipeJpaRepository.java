@@ -9,5 +9,5 @@ public interface RecipeJpaRepository extends JpaRepository<Recipe, Long> {
     Optional<Recipe> findByIdAndMemberId(Long Id, Long memberId);
 
     boolean existsByIdAndMemberId(Long Id, Long memberId);
-
+    
 }
