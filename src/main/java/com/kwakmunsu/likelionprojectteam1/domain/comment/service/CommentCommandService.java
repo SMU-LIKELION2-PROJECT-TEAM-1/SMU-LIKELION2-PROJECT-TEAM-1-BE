@@ -47,12 +47,14 @@ public class CommentCommandService {
         comment.updateContent(request.content());
     }
 
+    @Transactional
     public void delete(Long commentId, Long memberId) {
-        if (commentRepository.existsByIdAndMemberId(commentId, memberId)) {
-            commentRepository.deleteById(commentId);
-            return;
+        Comment comment = commentRepository.findByIdAndMemberId(commentId, memberId);
+        // 부모 댓글일 경우 하위 댓글을 다 삭제 후 부모 댓글 삭제
+        if (comment.isRoot()) {
+            commentRepository.deleteByParentCommentId(commentId);
         }
-        throw new UnAuthenticationException(ErrorMessage.DELETE_UNAUTHORIZED.getMessage());
+        commentRepository.deleteById(commentId);
     }
 
     private Long findParent(CommentCreateServiceRequest request) {

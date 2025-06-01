@@ -8,8 +8,8 @@ public interface CommentJpaRepository extends JpaRepository<Comment, Long> {
 
     void deleteByRecipeId(Long recipeId);
 
-    Optional<Comment> findByIdAndMemberId(Long id, Long memberId);
+    void deleteByParentCommentId(Long parentId);
 
-    boolean existsByIdAndMemberId(Long id, Long memberId);
+    Optional<Comment> findByIdAndMemberId(Long id, Long memberId);
 
 }

@@ -153,6 +153,7 @@ public class RecipeQueryDslRepository {
         List<CommentResponse> commentResponses = query
                 .select(constructor(CommentResponse.class,
                         comment.id,
+                        comment.parentCommentId,
                         commentAuthor.id,
                         commentAuthor.nickname,
                         comment.content,
