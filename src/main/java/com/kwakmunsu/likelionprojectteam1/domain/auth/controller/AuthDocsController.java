@@ -2,6 +2,7 @@ package com.kwakmunsu.likelionprojectteam1.domain.auth.controller;
 
 import com.kwakmunsu.likelionprojectteam1.domain.auth.controller.dto.ReissueTokenRequest;
 import com.kwakmunsu.likelionprojectteam1.global.SecurityOverrideCustomizer;
+import com.kwakmunsu.likelionprojectteam1.global.annotation.AuthMember;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -93,5 +94,26 @@ public abstract class AuthDocsController {
     @GetMapping("/oauth2/authorization/google")
     public void google() {
     }
+
+    @Operation(summary = "로그아웃",
+            description = """
+                    로그아웃 시 DB에 refreshToken을 삭제한다.
+                    - 프론트는 저장해둔 accessToken을 삭제하고 비로그인 상태로 변경 후 메인 페이지로 이동한다.
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "인증 성공 시 프론트엔드로 리다이렉트"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증되지 않은 사용자입니다.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    public abstract ResponseEntity<Void> getLogoutUrl(@AuthMember Long memberId);
 
 }
