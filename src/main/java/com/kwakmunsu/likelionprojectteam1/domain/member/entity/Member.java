@@ -105,6 +105,15 @@ public class Member {
         this.nickname = newNickname;
     }
 
+    public void updatePoint(int point) {
+        this.point += point;
+        updateGrade();
+    }
+
+    private void updateGrade() {
+        this.grade = Grade.getGradeByPoint(this.point);
+    }
+
     public void initializeRefreshToken() {
         this.refreshToken = null;
     }
