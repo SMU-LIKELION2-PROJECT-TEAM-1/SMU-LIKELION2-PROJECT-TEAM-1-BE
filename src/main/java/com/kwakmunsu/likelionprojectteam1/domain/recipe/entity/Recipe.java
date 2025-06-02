@@ -94,4 +94,8 @@ public class Recipe extends BaseTimeEntity {
         tag.updateTag(occasion, foodType, purpose);
     }
 
+    public boolean isChallenge() {
+        return boardType.equals(BoardType.CHALLENGE);
+    }
+
 }

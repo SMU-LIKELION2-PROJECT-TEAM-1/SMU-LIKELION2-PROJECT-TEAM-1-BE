@@ -1,5 +1,8 @@
 package com.kwakmunsu.likelionprojectteam1.domain.comment.service;
 
+import static com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.PointOption.COMMENT;
+import static com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.PointOption.UN_COMMENT;
+
 import com.kwakmunsu.likelionprojectteam1.domain.comment.entity.Comment;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.repository.CommentRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.comment.service.dto.request.CommentCreateServiceRequest;
@@ -10,7 +13,6 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberReposit
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.global.exception.NotFoundException;
-import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class CommentCommandService {
     private final MemberRepository memberRepository;
     private final RecipeRepository recipeRepository;
 
+    @Transactional
     public CommentCreateResponse create(CommentCreateServiceRequest request, Long recipeId) {
         // 부모 댓글 즉 첫 댓글일 경우 null 값이 저장된다. 대댓글 일 경우 부모 댓글 id 저장
         Long parentId = findParent(request);
@@ -32,6 +35,8 @@ public class CommentCommandService {
 
         Comment comment = getComment(parentId, member, recipe, request.content());
         Comment savedComment = commentRepository.save(comment);
+
+        member.updatePoint(COMMENT.getValue());
 
         return CommentCreateResponse.from(
                 savedComment.getId(),
@@ -55,6 +60,8 @@ public class CommentCommandService {
             commentRepository.deleteByParentCommentId(commentId);
         }
         commentRepository.deleteById(commentId);
+        Member member = memberRepository.findById(memberId);
+        member.updatePoint(UN_COMMENT.getValue());
     }
 
     private Long findParent(CommentCreateServiceRequest request) {

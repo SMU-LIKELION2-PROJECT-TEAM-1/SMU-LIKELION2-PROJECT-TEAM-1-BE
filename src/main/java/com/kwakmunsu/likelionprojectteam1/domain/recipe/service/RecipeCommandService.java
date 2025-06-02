@@ -5,14 +5,15 @@ import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
 import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.BoardType;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Difficulty;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.FoodType;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Occasion;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.PointOption;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Purpose;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Recipe;
+import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Tag;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.repository.RecipeRepository;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeCreateServiceRequest;
 import com.kwakmunsu.likelionprojectteam1.domain.recipe.service.dto.request.RecipeUpdateServiceRequest;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.FoodType;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Occasion;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Purpose;
-import com.kwakmunsu.likelionprojectteam1.domain.recipe.entity.Tag;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import java.util.List;
@@ -38,6 +39,10 @@ public class RecipeCommandService {
         Tag tag = createTag(request);
         Recipe recipe = createRecipe(request, member, tag);
         Recipe savedRecipe = recipeRepository.save(recipe);
+
+        if (savedRecipe.isChallenge()) {
+            member.updatePoint(PointOption.CHALLENGE.getValue());
+        }
 
         imageCommandService.upload(images, savedRecipe);
 
