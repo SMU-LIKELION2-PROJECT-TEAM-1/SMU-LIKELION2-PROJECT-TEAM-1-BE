@@ -105,4 +105,8 @@ public class Member {
         this.nickname = newNickname;
     }
 
+    public void initializeRefreshToken() {
+        this.refreshToken = null;
+    }
+
 }

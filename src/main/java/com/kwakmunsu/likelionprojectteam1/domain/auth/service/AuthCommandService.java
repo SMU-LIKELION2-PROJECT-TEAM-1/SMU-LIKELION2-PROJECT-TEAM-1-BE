@@ -1,7 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.domain.auth.service;
 
 import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Member;
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.MemberQueryService;
+import com.kwakmunsu.likelionprojectteam1.domain.member.repository.MemberRepository;
 import com.kwakmunsu.likelionprojectteam1.global.exception.UnAuthenticationException;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.ErrorMessage;
 import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.dto.TokenResponse;
@@ -15,16 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthCommandService {
 
     private final JwtProvider jwtProvider;
-    private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public TokenResponse reissue(String refreshToken) {
         if (jwtProvider.isNotValidateToken(refreshToken)) {
             throw new UnAuthenticationException(ErrorMessage.INVALID_TOKEN.getMessage());
         }
-        Member member = memberQueryService.findByRefreshToken(refreshToken);
+        Member member = memberRepository.findByRefreshToken(refreshToken);
 
         return getTokenResponse(member);
+    }
+
+    @Transactional
+    public void logout(Long memberId) {
+        Member member = memberRepository.findById(memberId);
+        member.initializeRefreshToken();
     }
 
     private TokenResponse getTokenResponse(Member member) {
