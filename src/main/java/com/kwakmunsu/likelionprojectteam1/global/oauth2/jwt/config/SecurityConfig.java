@@ -48,7 +48,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET,"/recipes**","/recipes/**","/ingredients/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/recipes**","/recipes/**","/ingredients/**","/swagger-ui/**", "/v3/api-docs/**")
+                        .permitAll()
                         .anyRequest().hasRole(Role.MEMBER.name())
                 );
 
