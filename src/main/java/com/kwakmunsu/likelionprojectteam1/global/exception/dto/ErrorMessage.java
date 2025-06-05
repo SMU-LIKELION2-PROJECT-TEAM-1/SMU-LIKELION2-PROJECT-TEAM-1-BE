@@ -22,6 +22,9 @@ public enum ErrorMessage {
     NOT_FOUND_COMMENT("ERROR - 해당 댓글을 찾을 수 없습니다."),
     BAD_REQUEST_COMMENT("ERROR - 잘못된 댓글 요청"),
 
+    // <=============== VOTE ===============>
+    DUPLICATE_VOTE("ERROR - 이미 투표 하였습니다."),
+
     // <=============== JWT ===============>
     TOKEN_EXPIRED("ERROR - JWT 토큰 만료"),
     INVALID_TOKEN("ERROR - 유효하지 않은 토큰입니다."),

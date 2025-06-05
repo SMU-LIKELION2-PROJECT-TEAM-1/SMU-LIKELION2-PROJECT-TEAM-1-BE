@@ -17,10 +17,7 @@ public class ViewController extends ViewDocsController{
     private final ViewCommandService viewCommandService;
 
     @PostMapping("/{recipeId}/views")
-    public ResponseEntity<Void> view(
-            @AuthMember Long memberId,
-            @PathVariable Long recipeId
-    ) {
+    public ResponseEntity<Void> view(@AuthMember Long memberId, @PathVariable Long recipeId) {
         viewCommandService.increment(memberId, recipeId);
 
         return ResponseEntity.ok().build();

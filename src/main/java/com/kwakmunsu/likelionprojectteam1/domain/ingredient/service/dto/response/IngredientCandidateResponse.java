@@ -1,4 +1,4 @@
-package com.kwakmunsu.likelionprojectteam1.domain.ingredient.service.dto;
+package com.kwakmunsu.likelionprojectteam1.domain.ingredient.service.dto.response;
 
 import java.util.List;
 

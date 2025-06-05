@@ -1,6 +1,5 @@
-package com.kwakmunsu.likelionprojectteam1.domain.ingredient.entity;
+package com.kwakmunsu.likelionprojectteam1.domain.vote.entity;
 
-import com.kwakmunsu.likelionprojectteam1.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +11,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "ingredient")
+@Table(name = "vote")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Ingredient extends BaseTimeEntity {
+public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,21 +24,17 @@ public class Ingredient extends BaseTimeEntity {
     @Column(name = "challenge_id", nullable = false)
     private Long challengeId;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "ingredient_id", nullable = false)
+    private Long ingredientId;
 
     @Builder
-    private Ingredient(
-            Long challengeId,
-            String title,
-            String description
-    ) {
+    private Vote(Long challengeId, Long memberId, Long ingredientId) {
         this.challengeId = challengeId;
-        this.title = title;
-        this.description = description;
+        this.memberId = memberId;
+        this.ingredientId = ingredientId;
     }
 
 }

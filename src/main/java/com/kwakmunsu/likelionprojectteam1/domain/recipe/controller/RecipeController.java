@@ -132,15 +132,6 @@ public class RecipeController extends RecipeDocsController {
         return ResponseEntity.ok().build();
     }
 
-    // 추후 삭제 예정
-    private static List<RecipePreviewResponse> getTestRecipePreviewResponse() {
-        List<RecipePreviewResponse> responses = new ArrayList<>();
-        RecipePreviewResponse testMock = RecipePreviewResponse.toTestMock();
-        responses.add(testMock);
-        responses.add(testMock);
-        return responses;
-    }
-
     private RecipePaginationServiceRequest getPaginationServiceRequest(
             String boardType,
             String occasion,
