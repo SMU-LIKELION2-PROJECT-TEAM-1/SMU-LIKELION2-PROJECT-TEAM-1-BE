@@ -20,8 +20,8 @@ public class RecipeQueryService {
 
     private final RecipeRepository recipeRepository;
 
-    public RecipePaginationResponse getRecipes(Long memberId, RecipePaginationServiceRequest request) {
-        return recipeRepository.findAllByPagination(request.toDomainRequest(memberId));
+    public RecipePaginationResponse getRecipes(RecipePaginationServiceRequest request) {
+        return recipeRepository.findAllByPagination(request.toDomainRequest());
     }
 
     public RecipeDetailResponse getRecipe(Long recipeId) {
@@ -44,9 +44,9 @@ public class RecipeQueryService {
     }
 
     private LocalDateTime getPreviousWeekMonDay() {
-        return LocalDateTime.now().plusDays(1)
+        return LocalDateTime.now()
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                .minusWeeks(1)  // 1주 전으로 이동
+//                .minusWeeks(1)  // 1주 전으로 이동
                 .withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 

@@ -52,7 +52,6 @@ public class RecipeController extends RecipeDocsController {
     @Override
     @GetMapping
     public ResponseEntity<RecipePaginationResponse> getRecipes(
-            @AuthMember Long memberId,
             @RequestParam(value = "boardType") String boardType,
             @RequestParam(value = "occasion", required = false) String occasion,
             @RequestParam(value = "cookingTime", required = false) Integer cookingTime,
@@ -72,7 +71,7 @@ public class RecipeController extends RecipeDocsController {
                 ingredient,
                 page
         );
-        RecipePaginationResponse response = recipeQueryService.getRecipes(memberId, request);
+        RecipePaginationResponse response = recipeQueryService.getRecipes(request);
 
         return ResponseEntity.ok(response);
     }

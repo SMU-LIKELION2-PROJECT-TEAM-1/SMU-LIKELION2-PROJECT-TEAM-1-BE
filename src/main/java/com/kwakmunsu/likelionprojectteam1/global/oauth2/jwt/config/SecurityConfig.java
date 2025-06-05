@@ -1,6 +1,7 @@
 package com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kwakmunsu.likelionprojectteam1.domain.member.entity.Role;
 import com.kwakmunsu.likelionprojectteam1.global.oauth2.handler.CustomOAuth2FailureHandler;
 import com.kwakmunsu.likelionprojectteam1.global.oauth2.handler.CustomOAuth2SuccessHandler;
 import com.kwakmunsu.likelionprojectteam1.global.oauth2.jwt.filter.JwtFilter;
@@ -12,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -46,8 +48,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.GET,"/recipes**","/recipes/**","/ingredients/**").permitAll()
+                        .anyRequest().hasRole(Role.MEMBER.name())
+                );
 
         http
                 .oauth2Login(oauth2 -> oauth2

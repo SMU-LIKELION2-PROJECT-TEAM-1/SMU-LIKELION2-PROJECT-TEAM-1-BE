@@ -1,6 +1,5 @@
 package com.kwakmunsu.likelionprojectteam1.domain.view.controller;
 
-import com.kwakmunsu.likelionprojectteam1.domain.member.service.dto.response.RecipeInfinityPreviewResponse;
 import com.kwakmunsu.likelionprojectteam1.global.exception.dto.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 public abstract class ViewDocsController {
 
     @Operation(
-            summary = "조회수 증가 API",
+            summary = "조회수 증가 API - JWT O",
             description = """
                     - 게시물 상세 조회 시 조회수가 증가합니다.
                     - 중복 조회는 허용되지 않습니다.

@@ -15,9 +15,8 @@ public record RecipePaginationServiceRequest(
         int page
 ) {
 
-    public RecipePaginationDomainRequest toDomainRequest(Long memberId) {
+    public RecipePaginationDomainRequest toDomainRequest() {
         return RecipePaginationDomainRequest.builder()
-                .memberId(memberId)
                 .boardType(boardType)
                 .occasion(occasion)
                 .cookingTime(cookingTime)
