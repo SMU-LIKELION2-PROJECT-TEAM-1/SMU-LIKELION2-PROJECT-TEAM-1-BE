@@ -67,7 +67,7 @@ public abstract class RecipeDocsController {
     );
 
     @Operation(
-            summary = "레시피 글 조회 요청",
+            summary = "레시피 글 조회 요청 - JWT x",
             description = "레시피 글을 조회합니다."
     )
     @ApiResponses(value = {
@@ -100,7 +100,7 @@ public abstract class RecipeDocsController {
     public abstract ResponseEntity<RecipeDetailResponse> getRecipe(Long recipeId);
 
     @Operation(
-            summary = "레시피 목록 조회",
+            summary = "레시피 목록 조회 - JWT x",
             description = """
                     레시피 목록을 조회합니다.<br>
                     - 게시판(DAILY, CHALLENGE) 선택이 가능합니다.
@@ -134,8 +134,6 @@ public abstract class RecipeDocsController {
             )
     })
     public abstract ResponseEntity<RecipePaginationResponse> getRecipes(
-            Long memberId,
-
             @Parameter(
                     description = "게시글 유형 선택(DAILY, CHALLENGE)",
                     example = "DAILY"
@@ -184,7 +182,7 @@ public abstract class RecipeDocsController {
     );
 
     @Operation(
-            summary = "레시피 검색",
+            summary = "레시피 검색 - JWT O",
             description = """
                     레시피를 검색 합니다. 레시피 제목에 해당 키워드가 포함되어 있다면 조회 목록에 포함됩니다.
                     """
@@ -213,7 +211,7 @@ public abstract class RecipeDocsController {
     );
 
     @Operation(
-            summary = "이 주의 레시피 Top 3를 조회합니다.",
+            summary = "이 주의 레시피 Top 3를 조회합니다. - JWT X",
             description = """
                     최근 일주일 간 좋아요를 가장 많이 받은 레시피 1~3위를 조회합니다.<br>
                     매주 월요일 00:00에 순위가 초기화됩니다.<br>
@@ -236,7 +234,7 @@ public abstract class RecipeDocsController {
     public abstract ResponseEntity<WeeklyTop3RecipesResponse> weekly();
 
     @Operation(
-            summary = "레시피 글 수정 요청",
+            summary = "레시피 글 수정 요청 - JWT O",
             description = """
                     작성자만이 레시피를 수정 할 수 있습니다. !! 수정된 값만 보내는 것이 아니라 전체를 다 보낸다.<br>
                     - 파일은 multipart/form-data 형식입니다. 현재 오류로 인해 swagger 에서 표시 안됨
@@ -279,7 +277,7 @@ public abstract class RecipeDocsController {
     );
 
     @Operation(
-            summary = "레시피 글 삭제 요청",
+            summary = "레시피 글 삭제 요청 - JWT O",
             description = "작성자만이 레시피를 삭제 할 수 있습니다."
     )
     @ApiResponses(value = {
@@ -307,7 +305,7 @@ public abstract class RecipeDocsController {
     public abstract ResponseEntity<Void> delete(Long memberId, Long recipeId);
 
     @Operation(
-            summary = "챌린지 레시피 재료 투표 요청",
+            summary = "챌린지 레시피 재료 투표 요청 - JWT O",
             description = "다음주차 챌린지 레시피 재료 투표를 합니다. 중복 투표는 불가하며 기간은 일주일 입니다."
     )
     @ApiResponses(value = {

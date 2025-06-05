@@ -4,7 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record RecipePaginationDomainRequest(
-        Long memberId,
         String boardType,
         String occasion,
         Integer cookingTime,
